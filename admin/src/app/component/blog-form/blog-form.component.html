@@ -20,9 +20,15 @@
             </div>
   
             <div class="mb-3">
-                <label for="blogCategory" class="form-label">Blog Category</label>
-                <input type="text" class="form-control" id="blogCategory" name="blogCategory" formControlName="category" placeholder="Enter the blog category"/>
-              </div>
+              <label for="blogCategory" class="form-label">Blog Category</label>
+              <select class="form-control" id="blogCategory" name="blogCategory" formControlName="category">
+                <option value="" disabled selected>Select a category</option>
+                <option value="sport">Sport</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="court-file">Court File</option>
+                <option value="court-case">Court Case</option>
+              </select>
+            </div>
 
             <div class="mb-3">
               <label for="blogTitle" class="form-label">Blog Title</label>
