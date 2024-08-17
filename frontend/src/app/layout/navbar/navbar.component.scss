@@ -1,0 +1,88 @@
+/* Header styles */
+.header {
+  background-color:rgba(46, 94, 114, 0.5490196078); /* Adjust to your desired background color */
+}
+
+.topbar {
+  background-color: rgba(46, 94, 114, 0.5490196078); /* Topbar background color */
+  color: #fff;
+  padding: 5px 0;
+}
+
+.navbar-brand img {
+  max-height: 60px; /* Adjust logo size as needed */
+}
+
+
+.social-links a,
+.contact-info a {
+  color: #fff;
+  margin-right: 15px;
+}
+
+.social-links a:hover,
+.contact-info a:hover {
+  color: #f3f3f3;
+}
+
+.contact-info a {
+  text-decoration: none;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: transparent; /* Navbar background color */
+}
+
+.navbar-brand img {
+  max-height: 40px; /* Adjust logo size */
+}
+
+.navbar-toggler {
+  border-color: #fff; /* Toggle button color */
+}
+
+.navbar-nav .nav-link {
+  color: #fff; /* Navbar link color */
+  padding: 6px 15px;
+  border-radius: 5px;
+  margin: 0px 2px 0px 2px;
+  text-transform: uppercase;
+}
+
+.navbar-nav .nav-link:hover{
+  background-color: #366478;
+  border-radius: 5px;
+}
+.navbar-nav .nav-link.active {
+  background-color: #366478;
+  color: #f3f3f3; /* Hover and active link color */
+}
+
+
+
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background-color: transparent; /* Background color of collapsed menu */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Separator line color */
+  }
+
+  .navbar-nav .nav-link {
+    color: #fff; /* Navbar link color */
+    background-color: #a3b4bb00; 
+    padding: 6px 15px;
+    border-radius: 5px;
+    margin: 4px 2px 2px 2px;
+    text-transform: uppercase;
+  }
+  
+  .navbar-nav .nav-link:hover{
+    background-color: #366478;
+    border-radius: 5px;
+  }
+  .navbar-nav .nav-link.active {
+    background-color: #366478;
+    color: #f3f3f3; /* Hover and active link color */
+  }
+}

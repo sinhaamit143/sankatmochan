@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-lg-3 col-md-6" *ngFor="let data of getData | paginate: { itemsPerPage: 4, currentPage: p }">
+        <div class="card">
+          <div class="card-img-top img-responsive">
+            <img [src]="data.image" alt="" class="img-fluid" />
+          </div>
+          <div class="card-body">
+            <p class="post-category">{{ data.category }}</p>
+            <h4 class="title" style="text-align: center;">
+              <a >{{ data.title }}</a>
+            </h4>
+            <h6>{{ data.createdAt }}</h6>
+            <p style="text-align: justify; overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 6; /* Adjust this value to control the number of lines */
+            line-clamp: 6;
+            -webkit-box-orient: vertical;">{{ data.description }}</p>
+            <a href="javascript:void(0)" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      </div>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>

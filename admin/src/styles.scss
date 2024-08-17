@@ -1,0 +1,70 @@
+/* You can add global styles to this file, and also import other style files */
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08); // Initial shadow for 3D effect
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-10px); // Lifting the card up for 3D effect
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15); // Stronger shadow on hover
+  }
+
+  .card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05); // Slight zoom-in effect on image hover
+    }
+  }
+
+  .card-body {
+    padding: 20px;
+    text-align: center;
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .card-text {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #6c757d;
+    }
+
+    .btn-primary {
+      border-radius: 6px;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover {
+        background-color: darken(#007bff, 10%);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 767px) {
+  .card {
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .card {
+    margin-bottom: 25px;
+  }
+}
+
+@media (min-width: 992px) {
+  .card {
+    margin-bottom: 30px;
+  }
+}

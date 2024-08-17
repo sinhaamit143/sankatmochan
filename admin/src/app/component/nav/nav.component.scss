@@ -1,0 +1,35 @@
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.table td.fs-4 {
+  max-width: 20%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+
+.table td.fs-4:hover {
+  white-space: normal;
+  overflow: visible;
+  background-color: #fff;
+  z-index: 10;
+  width: auto; /* This ensures the text expands when hovered */
+}
+
+.table td.fs-4:hover::before {
+  content: attr(data-full-text); /* Display full text using a data attribute */
+  position: absolute;
+  white-space: normal;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 11;
+}

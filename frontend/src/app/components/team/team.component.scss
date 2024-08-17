@@ -1,0 +1,325 @@
+.service-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-list li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5em;
+}
+
+.service-list li i {
+  margin-right: 10px; /* Space between the icon and text */
+}
+
+.service-list li span {
+  flex: 1;
+}
+
+/*--------------------------------------------------------------
+# Blog Author Section
+--------------------------------------------------------------*/
+.blog-author {
+    padding: 10px 0 40px 0;
+  }
+  
+  .blog-author .author-container {
+    padding: 20px;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--default-color), transparent 90%);
+    border: 1px solid #e0f7fa;
+    border-radius: 25px;
+  }
+  
+  .blog-author img {
+    max-width: 250px;
+    margin-right: 20px;
+    border-radius: 50%; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .blog-author h4 {
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 0px;
+    padding: 0;
+    color: #00796b;
+  }
+  
+  .blog-author .social-links {
+    margin: 0 10px 10px 0;
+  }
+  
+  .blog-author .social-links a {
+    color: color-mix(in srgb, var(--default-color), transparent 60%);
+    margin-right: 5px;
+  }
+  
+  .blog-author p {
+    font-style: italic;
+    color: #333333;
+    margin-bottom: 0;
+  }
+  
+
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+h4 {
+  font-weight: bold;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+.author-container {
+  margin-bottom: 30px;
+}
+
+.flex-shrink-0 {
+  width: 100%;
+  height: auto;
+  max-width: 150px;
+  border-radius: 55%;
+  object-fit: cover;
+}
+
+/* Desktop styles */
+@media (min-width: 992px) {
+  .col-4,
+  .col-8 {
+    float: left;
+  }
+
+  .col-4 {
+    width: 33.33333%;
+  }
+
+  .col-8 {
+    width: 66.66667%;
+  }
+
+  .author-container {
+    margin-bottom: 50px;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 991px) {
+  .col-4,
+  .col-8 {
+    float: left;
+  }
+
+  .col-4 {
+    width: 50%;
+  }
+
+  .col-8 {
+    width: 50%;
+  }
+
+  .author-container {
+    margin-bottom: 50px;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .col-4,
+  .col-8 {
+    float: none;
+    width: 100%;
+  }
+
+  .author-container {
+    margin-bottom: 30px;
+  }
+}
+
+
+/*--------------------------------------------------------------
+# Global Page Titles & Breadcrumbs
+--------------------------------------------------------------*/
+.page-title {
+  /* --background-color: var(--accent-color); */
+  background-image: url(../../../assets/img/background.jpg);
+  --default-color: #fff;
+  --heading-color: #fff;
+  color: var(--default-color);
+  background-color: var(--background-color);
+  position: relative;
+}
+
+.page-title .heading {
+    padding: 150px 0 10px 0;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+
+.page-title .heading h1 {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.page-title nav {
+  background-color: color-mix(in srgb, var(--default-color), transparent 92%);
+  padding: 8px 0;
+}
+
+.page-title nav ol {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.page-title nav ol a {
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+}
+
+.page-title nav ol a:hover {
+  color: var(--default-color);
+}
+
+.page-title nav ol li+li {
+  padding-left: 10px;
+}
+
+.page-title nav ol li+li::before {
+  content: "/";
+  display: inline-block;
+  padding-right: 10px;
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+}
+
+/*--------------------------------------------------------------
+# Global Sections
+--------------------------------------------------------------*/
+section,
+.section {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding: 30px 0;
+  scroll-margin-top: 112px;
+  overflow: clip;
+}
+
+@media (max-width: 1199px) {
+
+  section,
+  .section {
+    scroll-margin-top: 100px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Global Section Titles
+--------------------------------------------------------------*/
+.section-title {
+  text-align: left;
+  /* padding-bottom: 25px; */
+  position: relative;
+}
+
+.section-title h2 {
+  font-size: 16px;
+  font-weight: 500;
+  /* margin-bottom: 20px; */
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.section-title h2:after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 70px;
+  height: 3px;
+  background: var(--accent-color);
+  left: 0;
+  right: 0;
+  bottom: 8px;
+}
+
+.section-title p {
+  margin-bottom: 0;
+}
+
+
+/*--------------------------------------------------------------
+# Team Section
+--------------------------------------------------------------*/
+.team .member {
+  box-shadow: 0px 2px 25px color-mix(in srgb, var(--default-color), transparent 90%);
+  text-align: center;
+  border-radius: 15px;
+  padding: 15px;
+  overflow: hidden;
+}
+
+.team .member img {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.team .member .member-content {
+  padding: 0 20px 30px 20px;
+}
+
+.team .member h4 {
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 2px;
+  font-size: 20px;
+}
+
+.team .member span {
+  font-style: italic;
+  display: block;
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+}
+
+.team .member .social {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.team .member .social a {
+  color: color-mix(in srgb, var(--default-color), transparent 60%);
+  transition: 0.3s;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 60%);
+}
+
+.team .member .social a:hover {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.team .member .social i {
+  font-size: 18px;
+  margin: 0 2px;
+}
