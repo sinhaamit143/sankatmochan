@@ -8,7 +8,7 @@
         <h4 class="card-title mb-0">BLogs</h4>
       </div>
       <div class="card-body border-top">
-        <ul ngbNav #nav="ngbNav"  class="nav-tabs">
+        <ul ngbNav #nav="ngbNav" class="nav-tabs">
           <li [ngbNavItem]="1">
             <button ngbNavLink>Blogs List</button>
             <ng-template ngbNavContent>
@@ -17,10 +17,9 @@
                   <div class="card">
                     <div class="card-body">
                       <h4 class="card-title">Blogs Listing</h4>
-                      <h5 class="card-subtitle text-muted">
-                        Overview of the blogs
-                      </h5>
+                      <h5 class="card-subtitle text-muted">Overview of the blogs</h5>
                       <div class="table-responsive">
+                        <!-- <button class="btn btn-danger" (click)="onDeleteAll()">Delete All Blogs</button> -->
                         <table class="table align-middle text-nowrap">
                           <thead>
                             <tr>
@@ -35,7 +34,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr *ngFor='let data of getData'>
+                            <tr *ngFor="let data of getData | paginate: { itemsPerPage: 4, currentPage: p }">
                               <td>
                                 <div class="d-flex align-items-center">
                                   <img [src]="data.image" alt="user" width="85" class="rounded-3"/>
@@ -46,11 +45,25 @@
                                 <span class="text-muted">{{data.category}}</span>
                               </td>
 
-                              <td class="fs-4">{{ data.title }}</td>
+                              <td class="fs-4" style="position: relative;">
+                                <span
+                                  #tooltipTrigger
+                                  [ngbTooltip]="data.title"
+                                  container="body"
+                                  placement="top"
+                                  triggers="hover"
+                                  class="tooltip-trigger-element">
+                                  {{ data.title }}
+                                </span>
+                              </td>
 
-                              <td class="fs-4">{{ data.description }}</td>
+                              <td class="fs-4">
+                                <span [ngbTooltip]="data.description" tooltipPlacement="'custom-tooltip'" container="body">{{ data.description }}</span>
+                              </td>
 
-                              <td class="fs-4">{{ data.website }}</td>
+                              <td class="fs-4">
+                                <span [ngbTooltip]="data.website" tooltipPlacement="'custom-tooltip'" container="body">{{ data.website }}</span>
+                              </td>
 
                               <td>
                                 <h5 class="mb-0 fw-normal">{{ data.createdAt }}</h5>
@@ -61,14 +74,46 @@
                               </td>
 
                               <td class="d-flex justify-content-center">
-                                <button class="btn btn-primary btn-sm me-2" (click)="editBlog(data)">
-                                  Edit
-                                </button>
-                                <button class="btn btn-danger btn-sm" (click)="onDelete(data._id)">
-                                  Delete
-                                </button>
+                                <button class="btn btn-primary btn-sm" (click)="editBlog(data, content)">Edit</button>
+                                <button class="btn btn-danger btn-sm" (click)="onDelete(data._id)">Delete</button>
                               </td>
                               
+                              <!-- Edit Blog Modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Edit Blog</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" [(ngModel)]="selectedBlog.title" name="title">
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" class="form-control" id="category" [(ngModel)]="selectedBlog.category" name="category">
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" [(ngModel)]="selectedBlog.description" name="description"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="website" class="form-label">Website</label>
+        <input type="text" class="form-control" id="website" [(ngModel)]="selectedBlog.website" name="website">
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" class="form-control" id="image" (change)="handleFileInput($event)">
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="saveChanges(modal)">Save</button>
+  </div>
+</ng-template>
+
                             </tr>
                           </tbody>
                         </table>
@@ -76,6 +121,7 @@
                     </div>
                   </div>
                 </div>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
               </div>
             </ng-template>
           </li>
@@ -88,35 +134,36 @@
             <button ngbNavLink>Blogs Cards</button>
             <ng-template ngbNavContent>
               <h4 class="card-title">Blogs card</h4>
-              <h5 class="card-subtitle text-muted">
-                Overview of the blogs
-              </h5>
+              <h5 class="card-subtitle text-muted">Overview of the blogs</h5>
               <!-- Row -->
               <div class="row">
                 <!-- column blogs 1-->
-                
-                  <div class="col-lg-3 col-md-6" *ngFor="let data of getData ">
-                    <div class="card">
-                      <div class="card-img-top img-responsive">
-                        <img [src]="data.image" alt="" class="img-fluid" />
-                      </div>
-                      <div class="card-body">
-                        <p class="post-category">{{ data.category }}</p>
-                        <h4 class="title" style="text-align: center;">
-                          <a >{{ data.title }}</a>
-                        </h4>
-                        <h6>{{ data.createdAt }}</h6>
-                        <p style="text-align: justify; overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 6; /* Adjust this value to control the number of lines */
-                        line-clamp: 6;
-                        -webkit-box-orient: vertical;" >{{ data.description }}</p>
-                        <a href="javascript:void(0)" class="btn btn-primary">Read More</a>
-                      </div>
+
+                <div class="col-lg-3 col-md-6" *ngFor="let data of getData | paginate: { itemsPerPage: 4, currentPage: p }">
+                  <div class="card">
+                    <div class="card-img-top img-responsive">
+                      <img [src]="data.image" alt="" class="img-fluid" />
+                    </div>
+                    <div class="card-body">
+                      <p class="post-category">{{ data.category }}</p>
+                      <h4 class="title" style="text-align: center"><a>{{ data.title }}</a></h4>
+                      <h6>{{ data.createdAt }}</h6>
+                      <p
+                        style="
+                          text-align: justify;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          display: -webkit-box;
+                          -webkit-line-clamp: 6; /* Adjust this value to control the number of lines */
+                          line-clamp: 6;
+                          -webkit-box-orient: vertical;">
+                        {{ data.description }}
+                      </p>
+                      <a href="javascript:void(0)" class="btn btn-primary">Read More</a>
                     </div>
                   </div>
-                  
+                </div>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
               </div>
             </ng-template>
           </li>

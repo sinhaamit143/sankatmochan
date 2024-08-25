@@ -1,33 +1,35 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  CommonModule, LocationStrategy,
-  PathLocationStrategy
-} from '@angular/common';
+import { CommonModule, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
-
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgbModule, NgbTooltipModule  } from '@ng-bootstrap/ng-bootstrap';
 import { FullComponent } from './layouts/full/full.component';
-
-
 import { NavigationComponent } from './shared/header/navigation.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
-
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
-
 import { ContactService } from './services/contact/contact.service';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoginComponent } from './login/login.component';
+import { TokenInterceptor } from './services/token-interceptor';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './services/auth.guard';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  // Add other routes that should be protected by AuthGuard
+];
 @NgModule({
   declarations: [
     AppComponent,
     SpinnerComponent,
+    LoginComponent,
   ],
   imports: [
     CommonModule,
@@ -41,13 +43,20 @@ import { NgxPaginationModule } from 'ngx-pagination';
     FullComponent,
     NavigationComponent,
     SidebarComponent,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgbTooltipModule 
+    
   ],
-  providers: [ContactService,
+  providers: [ContactService,AuthService,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

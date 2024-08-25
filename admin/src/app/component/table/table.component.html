@@ -7,6 +7,24 @@
           <h5 class="card-subtitle">Overview of the Contacts</h5>
           <!-- title -->
           <div class="table-responsive">
+            <!-- Delete All Button -->
+<button (click)="confirmDeleteAll()" [disabled]="isDeletingAll">Delete All Contacts</button>
+
+<!-- Confirmation Modal -->
+<ng-template #confirmDeleteAllModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm Deletion</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cancel')"></button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete all contacts? This action cannot be undone.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="confirmDeleteAllAction()">Confirm</button>
+  </div>
+</ng-template>
+
             <table class="table align-middle">
               <thead>
                 <tr>
@@ -19,7 +37,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor='let data of getData '>
+                <tr *ngFor='let data of getData | paginate: { itemsPerPage: 4, currentPage: p }'>
                   <td>
                     <h5 class="mb-0 font-medium">{{data.name}}</h5>
                   </td>
@@ -34,22 +52,54 @@
                     <h5 class="mb-0 fw-normal">{{data.message}}</h5>
                   </td>
                   <td class="d-flex justify-content-center">
-                    <button class="btn btn-primary btn-sm me-2" (click)="editContact(data)">
-                      Edit
-                    </button>
-                    <button class="btn btn-danger btn-sm" (click)="onDelete(data._id)">
-                      Delete
-                    </button>
+                    <button class="btn btn-primary" (click)="editContact(data, content)">Edit</button>
+                    <button class="btn btn-danger btn-sm" (click)="onDelete(data._id)">Delete</button>
                   </td>
+
+                  <!-- Modal Template -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Edit Contact</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" [(ngModel)]="selectedContact.name" name="name">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="selectedContact.email" name="email">
+      </div>
+      <div class="mb-3">
+        <label for="number" class="form-label">Phone</label>
+        <input type="text" class="form-control" id="number" [(ngModel)]="selectedContact.number" name="number">
+      </div>
+      <div class="mb-3">
+        <label for="subject" class="form-label">Subject</label>
+        <input type="text" class="form-control" id="subject" [(ngModel)]="selectedContact.subject" name="subject">
+      </div>
+      <div class="mb-3">
+        <label for="message" class="form-label">Message</label>
+        <textarea class="form-control" id="message" [(ngModel)]="selectedContact.message" name="message"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('Save')">Update</button>
+  </div>
+</ng-template>
+
                 </tr>
               </tbody>
-              
+
             </table>
-            
+
           </div>
-          
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
       </div>
     </div>
   </div>
-  

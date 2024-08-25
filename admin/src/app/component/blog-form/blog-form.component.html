@@ -10,10 +10,10 @@
               <label for="blogImage" class="form-label">Add Image</label>
               <div class="dropzone" id="dropzone" (click)="imageInput.click()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"(drop)="onDrop($event)">
                 <p>Drag and drop an image here, or click to select an image</p>
-                <input formControlName="image" type="file" id="blogImage" name="image" accept="image/*" #imageInput (change)="onFileSelected($event)">
+                <input formControlName="image" type="file" id="blogImage" name="image" accept="image/*" #imageInput (change)="onFileSelected($event)" (change)="onChange($event)" #fileUpload hidden>
                 
               </div>
-              <input type="file" (change)="onChange($event)" #fileUpload >
+              
               <div class="preview-container">
                 <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview" class="preview-image"/>
               </div>

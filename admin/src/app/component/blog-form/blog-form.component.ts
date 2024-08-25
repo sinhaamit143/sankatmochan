@@ -1,5 +1,3 @@
-
-
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,7 +9,6 @@ import { BlogForm, BlogService } from 'src/app/services/blogs/blog.service';
   styleUrls: ['./blog-form.component.scss'],
 })
 export class BlogFormComponent implements OnInit {
-
 
   myForm!: FormGroup; // Declare myForm here
   file: File | null = null;
@@ -56,7 +53,16 @@ export class BlogFormComponent implements OnInit {
       console.log(res);
       alert("Blogs created successfully");
              this.myForm?.reset();
+             this.imagePreview = null;
+             this.file = null;
              this.isLoading = false;
+
+// Clear the file input field
+            const fileInput = document.getElementById('blogImage') as HTMLInputElement;
+            if (fileInput) {
+            fileInput.value = '';
+            }
+
          },
          (error) => {
            console.error(error);
@@ -69,38 +75,6 @@ export class BlogFormComponent implements OnInit {
       alert("Please fill all the fields");
       this.isLoading = false;
     }
-  
-
-
-
-    // if (this.myForm?.valid) {
-    //   this.isLoading = true;
-    //   const blogForm: BlogForm = {
-    //     image: this.myForm.get('image')?.value,
-    //     category: this.myForm.get('category')?.value,
-    //     title: this.myForm.get('title')?.value,
-    //     description: this.myForm.get('description')?.value,
-    //     website: this.myForm.get('website')?.value,
-    //     // Add other properties as needed
-    //   };
-  
-    //   this._blogFormService.onBlogSave(blogForm).subscribe(
-    //     (response) => {
-    //       console.log(response);
-    //       alert("Blogs created successfully");
-    //       this.myForm?.reset();
-    //       this.isLoading = false;
-    //     },
-    //     (error) => {
-    //       console.error(error);
-    //       alert("Error sending Blog data. Please try again.");
-    //       this.isLoading = false;
-    //     }
-    //   );
-    // } else {
-    //   alert("Please fill all the fields");
-    //   this.isLoading = false;
-    // }
   }
 
   // On file Select

@@ -79,7 +79,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ _id: user._id, email: user.email, name: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
     // Return the generated token in the response
-    return res.json({ token });
+    return res.json({ token , _id: user._id, email: user.email, name: user.username });
   } catch (error) {
     // Catch any errors during login and return a 500 error with a message
     console.error('Error during login:', error);

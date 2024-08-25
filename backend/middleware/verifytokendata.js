@@ -33,7 +33,9 @@ const requestLogger = morgan('combined', {
 const verifyToken = (req, res, next) => {
   requestLogger(req, res, () => {}); // Log the request
 
-  const token = req.header('x-auth-token');
+  console.log('Headers received:', req.headers); // Log all headers
+  const token = req.header('authorization')?.replace('Bearer ', ''); 
+  console.log('Token received:', token); // Log the token
 
   if (!token) {
     logger.error('No token provided');

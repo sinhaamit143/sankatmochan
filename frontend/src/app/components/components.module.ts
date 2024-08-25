@@ -11,7 +11,6 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { TeamComponent } from './team/team.component';
 import { BlogComponent } from './blog/blog.component';
 import { ContactComponent } from './contact/contact.component';
-import { LoginComponent } from './login/login.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
@@ -22,8 +21,7 @@ import {NgxPaginationModule} from 'ngx-pagination';
     PortfolioComponent,
     TeamComponent,
     BlogComponent,
-    ContactComponent,
-    LoginComponent
+    ContactComponent
   ],
   imports: [
     CommonModule,

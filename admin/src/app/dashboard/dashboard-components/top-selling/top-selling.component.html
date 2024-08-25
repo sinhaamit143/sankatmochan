@@ -5,6 +5,7 @@
       <h5 class="card-subtitle">Overview of the Contacts</h5>
       <!-- title -->
       <div class="table-responsive">
+        <!-- <button class="btn btn-danger" (click)="onDeleteAll()">Delete All Contacts</button> -->
         <table class="table align-middle">
           <thead>
             <tr>
@@ -17,7 +18,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor='let data of getData'>
+            <tr *ngFor='let data of getData | paginate: { itemsPerPage: 4, currentPage: p }'>
               <td>
                 <h5 class="mb-0 font-medium">{{data.name}}</h5>
               </td>
@@ -44,5 +45,6 @@
           </tbody>
         </table>
       </div>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
     </div>
   </div>

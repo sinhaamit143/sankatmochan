@@ -11,7 +11,7 @@
   <!-- ============================================================== -->
   <!-- create new -->
   <!-- ============================================================== -->
-  <li class="nav-item" ngbDropdown>
+  <!-- <li class="nav-item" ngbDropdown>
     <a
       ngbDropdownToggle
       class="nav-link waves-effect waves-dark"
@@ -30,7 +30,7 @@
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="#">Something else here</a>
     </div>
-  </li>
+  </li> -->
 </ul>
 <!-- ============================================================== -->
 <!-- Right side toggle and nav items -->
@@ -49,12 +49,12 @@
       aria-expanded="false"
     >
       <img
-        src="assets/images/users/user4.jpg"
+        src="assets/images/logos/logo.png"
         alt="user"
         class="rounded-circle"
         width="31"
       />
-      <span class="ms-2">John Deo</span>
+      <span class="ms-2">Sankat Mochan</span>
     </a>
     <div class="dropdown-menu-right" ngbDropdownMenu>
       <a class="dropdown-item" href="javascript:void(0)"> My Profile</a>
@@ -63,7 +63,8 @@
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="javascript:void(0)"> Account Setting</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="javascript:void(0)"> Logout</a>
+      <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a>
+
     </div>
   </li>
   <!-- ============================================================== -->

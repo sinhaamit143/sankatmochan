@@ -42,7 +42,7 @@ module.exports = (app) => {
     const blogs = require('../controller/blogs.controller.js');
 
     // Create a new Blogs
-    app.post('/blogs', upload.single('image'), blogs.create);
+    app.post('/blogs', upload.single('image'),verifyToken, blogs.create);
 
     // // Retrieve all Blogs
     app.get('/blogs', blogs.findAll);
@@ -51,11 +51,11 @@ module.exports = (app) => {
     app.get('/blogs/:blogsId', blogs.findOne);
 
     // // Update a Blogs with BlogsId
-    app.put('/blogs/:blogsId', blogs.update);
+    app.put('/blogs/:blogsId', upload.single('image'), verifyToken, blogs.update);
 
     // // Delete a Blogs with BlogsId
-    app.delete('/blogs/:blogsId', blogs.delete);
+    app.delete('/blogs/:blogsId',verifyToken, blogs.delete);
 
     // // Delete all Blogs
-    app.delete('/blogs', blogs.deleteAll);
+    app.delete('/blogs',verifyToken, blogs.deleteAll);
 };

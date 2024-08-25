@@ -6,17 +6,17 @@ module.exports = (app) => {
     app.post('/contact', contact.create);
 
     // // Retrieve all contact
-    app.get('/contact', contact.findAll);
+    app.get('/contact',verifyToken, contact.findAll);
 
     // // Retrieve a single Contact with contactId
-    app.get('/contact/:contactId', contact.findOne);
+    app.get('/contact/:contactId',verifyToken, contact.findOne);
 
     // // Update a Note with contactId
-    app.put('/contact/:contactId', contact.update);
+    app.put('/contact/:contactId',verifyToken, contact.update);
 
     // // Delete a Note with contactId
-    app.delete('/contact/:contactId', contact.delete);
+    app.delete('/contact/:contactId',verifyToken, contact.delete);
 
     // // Delete all contact
-    app.delete('/contact', contact.deleteAll);
+    app.delete('/contact',verifyToken, contact.deleteAll);
 }

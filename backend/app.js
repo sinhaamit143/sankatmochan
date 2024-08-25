@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
 // Import required modules
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -12,9 +12,6 @@ const blogRoutes = require('./routes/blogs.routes.js');
 
 // Create an Express app
 const app = express();
-
-// Define MongoDB connection string
-console.log(process.env) // remove this after you've confirmed it is working
 
 const AdminDatabase = process.env.DATABASE;
 mongoose.connect(AdminDatabase);
