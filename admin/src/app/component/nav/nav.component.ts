@@ -1,5 +1,5 @@
-import { Component, ViewChild, AfterViewChecked, ElementRef, Renderer2 } from '@angular/core';
-import { NgbNavModule, NgbDropdownModule, NgbAlertModule, NgbTooltip, NgbTooltipModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { NgbNavModule, NgbDropdownModule, NgbAlertModule, NgbTooltipModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { NgFor, NgIf } from '@angular/common';
 import { BlogService } from 'src/app/services/blogs/blog.service';
@@ -16,16 +16,12 @@ import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationMod
     NgbAlertModule, 
     FormsModule, 
     NgxPaginationModule, 
-    NgbTooltipModule
   ],
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NgbdnavBasicComponent implements AfterViewChecked {
-
-  @ViewChild(NgbTooltip) tooltip: NgbTooltip;
-  @ViewChild('tooltipTrigger', { read: ElementRef }) tooltipTrigger: ElementRef;
-
+export class NgbdnavBasicComponent {
+  
   active2 = 'top';
   collection = [];
   p: number = 1; // current page number
@@ -48,23 +44,8 @@ export class NgbdnavBasicComponent implements AfterViewChecked {
     this.fetchAllBlogs();
   }
 
-  ngAfterViewChecked() {
-    if (this.tooltip && this.tooltip.isOpen()) {
-      this.adjustTooltipPosition();
-    }
-  }
 
-  adjustTooltipPosition() {
-    const tooltipElement = document.querySelector('.tooltip.show') as HTMLElement;
-    const tooltipReferenceElement = this.tooltipTrigger.nativeElement as HTMLElement;
 
-    if (tooltipElement && tooltipReferenceElement) {
-      const rect = tooltipReferenceElement.getBoundingClientRect();
-
-      this.renderer.setStyle(tooltipElement, 'left', `${rect.left + window.scrollX}px`);
-      this.renderer.setStyle(tooltipElement, 'top', `${rect.top + window.scrollY - tooltipElement.offsetHeight}px`);
-    }
-  }
 
   // Fetch all contacts
   fetchAllBlogs() {

@@ -46,23 +46,15 @@
                               </td>
 
                               <td class="fs-4" style="position: relative;">
-                                <span
-                                  #tooltipTrigger
-                                  [ngbTooltip]="data.title"
-                                  container="body"
-                                  placement="top"
-                                  triggers="hover"
-                                  class="tooltip-trigger-element">
-                                  {{ data.title }}
-                                </span>
+                                <span [title]="data.title">{{ data.title }}</span>
                               </td>
 
                               <td class="fs-4">
-                                <span [ngbTooltip]="data.description" tooltipPlacement="'custom-tooltip'" container="body">{{ data.description }}</span>
+                                <span [title]="data.description">{{ data.description }}</span>
                               </td>
 
                               <td class="fs-4">
-                                <span [ngbTooltip]="data.website" tooltipPlacement="'custom-tooltip'" container="body">{{ data.website }}</span>
+                                <span [title]="data.website">{{ data.website }}</span>
                               </td>
 
                               <td>
