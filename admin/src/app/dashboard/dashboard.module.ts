@@ -10,6 +10,7 @@ import { TopSellingComponent } from "./dashboard-components/top-selling/top-sell
 import { TopCardsComponent } from "./dashboard-components/top-cards/top-cards.component";
 import { BlogCardsComponent } from "./dashboard-components/blog-cards/blog-cards.component";
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgFor, NgIf } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -30,7 +31,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     NgApexchartsModule,
     TopSellingComponent,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgFor, NgIf
   ],
   declarations: [
     DashboardComponent,

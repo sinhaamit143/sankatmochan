@@ -21,7 +21,8 @@ export class TableComponent implements OnInit {
   isDeletingAll = false;  // Flag to disable the button
 
   // ViewChild to get the reference to the modal template
-  @ViewChild('confirmDeleteAllModal') confirmDeleteAllModal: any;
+  @ViewChild('confirmDeleteModal') confirmDeleteModal: any;
+  private contactToDeleteId: string | null = null;  // Store the ID of the contact to be deleted
 
   constructor(private _contactService: ContactService, private modalService: NgbModal) {
     for (let i = 1; i <= 100; i++) {
@@ -58,10 +59,20 @@ export class TableComponent implements OnInit {
   }
 
   onDelete(id: string) {
-    this._contactService.onContactDelete(id).subscribe(res => {
-      console.log(res);
-      this.fetchAllContacts();
+    this.contactToDeleteId = id;  // Set the ID of the contact to be deleted
+    const modalRef = this.modalService.open(this.confirmDeleteModal, { ariaLabelledBy: 'modal-basic-title' });
+    modalRef.result.then((result) => {
+      if (result === 'Delete' && this.contactToDeleteId) {
+        this._contactService.onContactDelete(this.contactToDeleteId).subscribe(res => {
+          console.log(res);
+          this.fetchAllContacts();
+        });
+      }
     });
+  }
+
+  confirmDelete(modal: any) {
+    modal.close('Delete');  // Trigger the deletion action
   }
 
   confirmDeleteAll() {
@@ -71,6 +82,9 @@ export class TableComponent implements OnInit {
         this.confirmDeleteAllAction();
       }
     });
+  }
+  confirmDeleteAllModal(confirmDeleteAllModal: any, arg1: { ariaLabelledBy: string; }) {
+    throw new Error('Method not implemented.');
   }
 
   confirmDeleteAllAction() {

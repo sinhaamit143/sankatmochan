@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgbNavModule, NgbDropdownModule, NgbAlertModule, NgbTooltipModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { NgFor, NgIf } from '@angular/common';
@@ -15,7 +15,7 @@ import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationMod
     NgIf, 
     NgbAlertModule, 
     FormsModule, 
-    NgxPaginationModule, 
+    NgxPaginationModule
   ],
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
@@ -30,10 +30,13 @@ export class NgbdnavBasicComponent {
   selectedBlog: any = {}; // Store the selected blog data for editing
   getData: any;
 
+  // ViewChild to get the reference to the confirmation modal template
+  @ViewChild('confirmDeleteModal') confirmDeleteModal: any;
+  private blogToDeleteId: string | null = null;  // Store the ID of the blog to be deleted
+
   constructor(
     private _blogService: BlogService, 
-    private modalService: NgbModal, 
-    private renderer: Renderer2
+    private modalService: NgbModal
   ) {
     for (let i = 1; i <= 100; i++) {
       this.collection.push(`item ${i}`);
@@ -44,10 +47,7 @@ export class NgbdnavBasicComponent {
     this.fetchAllBlogs();
   }
 
-
-
-
-  // Fetch all contacts
+  // Fetch all blogs
   fetchAllBlogs() {
     this._blogService.onBlogGetAll().subscribe(res => {
       this.getData = res;
@@ -60,15 +60,23 @@ export class NgbdnavBasicComponent {
   }
 
   onDelete(id: any) {
-    this._blogService.onBlogDelete(id).subscribe(res => {
-      console.log(res);
-      this._blogService.onBlogGetAll().subscribe(res => {
-        this.getData = res;
-      });
+    this.blogToDeleteId = id;  // Set the ID of the blog to be deleted
+    const modalRef = this.modalService.open(this.confirmDeleteModal, { ariaLabelledBy: 'modal-basic-title' });
+    modalRef.result.then((result) => {
+      if (result === 'Delete' && this.blogToDeleteId) {
+        this._blogService.onBlogDelete(this.blogToDeleteId).subscribe(res => {
+          console.log(res);
+          this.fetchAllBlogs();
+        });
+      }
     });
   }
 
-  // Delete all contacts
+  confirmDelete(modal: any) {
+    modal.close('Delete');  // Trigger the deletion action
+  }
+
+  // Delete all blogs
   onDeleteAll() {
     this._blogService.onBlogDeleteAll().subscribe(res => {
       console.log('All Blogs deleted', res);
@@ -78,9 +86,7 @@ export class NgbdnavBasicComponent {
 
   saveChanges(modal: any) {
     this._blogService.onBlogUpdate(this.selectedBlog._id, this.selectedBlog).subscribe(res => {
-      this._blogService.onBlogGetAll().subscribe(res => {
-        this.getData = res;
-      });
+      this.fetchAllBlogs(); // Refresh the blog list after saving changes
       modal.close(); // Close the modal after saving
     });
   }

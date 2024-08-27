@@ -22,19 +22,4 @@ export class BlogCardsComponent implements OnInit {
       this.getData=res
     })
   }
-editBlog(blog: BlogService) { // Specify the type as 'Contact'
-  console.log('Edit blog:', blog);
-  // Add your edit logic here
-}
-
-onDelete(id: any){
-  this._blogService.onBlogDelete(id).subscribe(res =>{
-    console.log(res)
-    this._blogService.onBlogGetAll().subscribe( res=>{
-      this.getData=res
-    })
-
-  })
-}
-
 }
