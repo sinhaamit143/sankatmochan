@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, AfterViewInit, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ContactService } from '../services/contact/contact.service';
+import { LocalstorageService } from '../services/localstorage.service';
 
 @Component({
   selector: 'app-layout',
@@ -14,9 +14,9 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   constructor(
     private elementRef: ElementRef,
     @Inject(DOCUMENT) private document: Document,
-    private contactForm: ContactService
+    private localStorage: LocalstorageService
   ) {
-    //
+    this.viewModel = !this.localStorage.isAgreedModal();
     if (this.viewModel) {
       this.disablePageInteraction();
     }
@@ -27,7 +27,7 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void { }
 
   accept(): void {
-    this.contactForm.setAgreed(true);
+    this.localStorage.setAgreed(true);
     this.viewModel = false;
     this.enablePageInteraction();
   }
