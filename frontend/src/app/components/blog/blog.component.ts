@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { BlogService } from 'src/app/services/blog/blog.service';
 
 @Component({
@@ -11,8 +11,21 @@ export class BlogComponent implements OnInit {
   getData: any;
   p: number = 1; // current page number
   itemsPerPage: number = 6; // items per page
+  id: any;
+  data: any;
 
-  constructor(private _blogService: BlogService) {}
+  constructor(private _blogService: BlogService, private route: ActivatedRoute) {
+    this.route.params.subscribe((param: any) => {
+      this.id = param.id;
+      if (this.id) {
+        this._blogService.onBlogFindOne(this.id).subscribe((res: any) => {
+          this.data = res;
+        }, err => {
+          console.log(err.message)
+        })
+      }
+    })
+  }
 
   ngOnInit(): void {
     this._blogService.onBlogGetAll().subscribe(res => {
