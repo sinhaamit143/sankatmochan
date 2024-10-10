@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsRoutes } from './component.routing';
@@ -31,7 +32,7 @@ import { BlogFormComponent } from './blog-form/blog-form.component';
     NgbdButtonsComponent,
     CardsComponent,
     TableComponent,
-    
+    NgxDropzoneModule
   ],
   declarations: [
     BlogFormComponent

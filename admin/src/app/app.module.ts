@@ -19,6 +19,7 @@ import { TokenInterceptor } from './services/token-interceptor';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -44,7 +45,8 @@ const routes: Routes = [
     NavigationComponent,
     SidebarComponent,
     NgxPaginationModule,
-    NgbTooltipModule 
+    NgbTooltipModule,
+    NgxDropzoneModule 
     
   ],
   providers: [ContactService,AuthService,

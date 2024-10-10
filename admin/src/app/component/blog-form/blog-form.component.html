@@ -6,18 +6,24 @@
           <form [formGroup]="myForm" (ngSubmit)="onSubmit()" id="blog_form">
 
             <!-- Drag and Drop Image Upload -->
-            <div class="mb-3">
-              <label for="blogImage" class="form-label">Add Image</label>
-              <div class="dropzone" id="dropzone" (click)="imageInput.click()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)"(drop)="onDrop($event)">
-                <p>Drag and drop an image here, or click to select an image</p>
-                <input formControlName="image" type="file" id="blogImage" name="image" accept="image/*" #imageInput (change)="onFileSelected($event)" (change)="onChange($event)" #fileUpload hidden>
-                
-              </div>
-              
-              <div class="preview-container">
-                <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview" class="preview-image"/>
-              </div>
-            </div>
+<div class="mb-3">
+  <label for="blogImage" class="form-label">Add Image</label>
+  
+  <!-- Using ngx-dropzone for drag-and-drop functionality -->
+  <div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+    <ngx-dropzone-label>Drag and drop an image here, or click to select an image</ngx-dropzone-label>
+    <ngx-dropzone-image-preview 
+      ngProjectAs="ngx-dropzone-preview" 
+      [removable]="true" 
+      *ngFor="let f of files" 
+      [file]="f"
+      (removed)="onRemove(f)">
+    </ngx-dropzone-image-preview>
+  </div>
+</div>
+
+            
+            
   
             <div class="mb-3">
               <label for="blogCategory" class="form-label">Blog Category</label>
