@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-//import { AlertService } from './alert.service';
 import { environment } from 'src/environments/environment';
 import { TokenService } from './token/token.service';
 
@@ -14,7 +13,6 @@ export class AuthService {
   constructor(
     private http :HttpClient,
     private router:Router,
-    //private as:AlertService,
     private ts : TokenService
   ) { }
 

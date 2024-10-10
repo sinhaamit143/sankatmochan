@@ -1,142 +1,126 @@
-const Contact = require('../models/contact.model.js');
+const createError = require('http-errors')
+const Model = require('../Models/Contact.Model')
+const mongoose = require('mongoose')
+const ModelName =  'Role'
 
+module.exports = {
 
-// Create and Save a new Contact
-exports.create = (req, res) => {
-
-    // Validate request
-    if(!req.body) {
-        return res.status(400).send({
-            message: "Contact content can not be empty"
-        });
-    }
-
-    // Create a Contact
-    const contact = new Contact({
-        name:  req.body.name,
-        number:  req.body.number,
-        email:  req.body.email,
-        subject: req.body.subject,
-        message:  req.body.message,
-    });
-
-    // Save Contact in the database
-    contact.save()
-    .then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the Contact."
-        });
-    });
-};
-
-// Retrieve and return all Contacts from the database.
-exports.findAll = (req, res, next) => {
-Contact.find()
-    .then(contact => {
-        res.send(contact);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while retrieving contact."
-        });
-    });
-};
-
-// // Find a single contact with a contactId
-exports.findOne = (req, res) => {
-Contact.findById(req.params.contactId)
-    .then(contact => {
-        console.log(contact)
-        if(!contact) {
-            return res.status(404).send({
-                message: "contact not found with id " + req.params.contactId
-            });            
-        }
-        res.send(contact);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "contact not found with id " + req.params.contactId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error retrieving contact with id " + req.params.contactId
-        });
-    });
-};
-
-// // Update a contact identified by the contactId in the request
-exports.update = (req, res) => {
-    // Validate Request
-    if (!req.params.contactId || !req.body.name || !req.body.number || !req.body.email || !req.body.subject || !req.body.message) {
-        return res.status(400).send({
-            message: "Contact information cannot be empty"
-        });
-    }
-
-    // Find contact and update it with the request body
-    Contact.findByIdAndUpdate(req.params.contactId, {
-        name: req.body.name,
-        number: req.body.number,
-        email: req.body.email,
-        subject: req.body.subject,
-        message: req.body.message,
-    }, { new: true })
-    .then(contact => {
-        if (!contact) {
-            return res.status(404).send({
-                message: "Contact not found with id " + req.params.contactId
-            });
-        }
-        res.send(contact);
-    }).catch(err => {
-        if (err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Contact not found with id " + req.params.contactId
-            });                
-        }
-        return res.status(500).send({
-            message: "Error updating contact with id " + req.params.contactId
-        });
-    });
-};
-
-// // Delete a contact with the specified contactId in the request
-exports.delete = (req, res) => {
-Contact.findByIdAndDelete(req.params.contactId)
-    .then(contact => {
-        if(!contact) {
-            return res.status(404).send({
-                message: "contact not found with id " + req.params.contactId
-            });
-        }
-        res.send({message: "contact deleted successfully!"});
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "contact not found with id " + req.params.contactId
-            });                
-        }
-        return res.status(500).send({
-            message: "Could not delete contact with id " + req.params.contactId
-        });
-    });
-};
-
-
-// Delete all Contacts from the database.
-exports.deleteAll = async (req, res) => {
+  create: async (req, res, next) => {
     try {
-        const result = await Contact.deleteMany({});
-        if (result.deletedCount === 0) {
-            res.status(404).send({ message: "No contacts found to delete." });
-        } else {
-            res.status(200).send({ message: "All contacts deleted successfully." });
-        }
-    } catch (err) {
-        res.status(500).send({
-            message: err.message || "Some error occurred while deleting contacts."
-        });
+      const data = req.body
+      data.created_by = req.user ? req.user._id : 'unauth'
+      data.updated_by = req.user ? req.user._id : 'unauth'
+      data.defaultSpace = req.user.defaultSpace
+      data.created_at = Date.now()
+      const newData = new Model(data)
+      const result = await newData.save()
+      res.json(newData)
+      return
+    } catch (error) {
+      next(error)
     }
-};
+  },
+  get: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      if (!id) {
+        throw createError.BadRequest('Invalid Parameters')
+      }
+      const result = await Model.findById({ _id: mongoose.Types.ObjectId(id) })
+      if (!result) {
+        throw createError.NotFound(`No ${ModelName} Found`)
+      }
+      res.send({
+        success: true, data: result,
+      })
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
+  list: async (req, res, next) => {
+    try {
+      const { name, is_active, page, limit, sort } = req.query
+      const _page = page ? parseInt(page) : 1
+      const _limit = limit ? parseInt(limit) : 20
+      const _skip = (_page - 1) * _limit
+      const _sort = sort ? sort : '+name'
+      const query = {};
+      if (name) {
+        query.name = new RegExp(name, 'i')
+      }
+      query.is_active = true;
+      const result = await Model.aggregate([
+        {
+          $match: query
+        },
+        {
+          $skip: _skip
+        },
+        {
+          $limit: _limit
+        }
+      ])
+      res.json(result)
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
+  update: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const data = req.body
+
+      if (!id) {
+        throw createError.BadRequest('Invalid Parameters')
+      }
+      if (!data) {
+        throw createError.BadRequest('Invalid Parameters')
+      }
+      data.updated_at = Date.now()
+      const result = await Model.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: data })
+      res.json(result)
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
+  delete: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      if (!id) {
+        throw createError.BadRequest('Invalid Parameters')
+      }
+      const deleted_at = Date.now()
+      const result = await Model.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: { is_active: false, deleted_at } })
+      res.json(result)
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
+  restore: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      if (!id) {
+        throw createError.BadRequest('Invalid Parameters')
+      }
+      const dataToBeDeleted = await Model.findOne({ _id: mongoose.Types.ObjectId(id) }, { name: 1 }).lean()
+      if (!dataToBeDeleted) {
+        throw createError.NotFound(`${ModelName} Not Found`)
+      }
+      const dataExists = await Model.findOne({ name: dataToBeDeleted.name, is_active: false }).lean()
+      if (dataExists) {
+        throw createError.Conflict(`${ModelName} already exists`)
+      }
+      const restored_at = Date.now()
+      const result = await Model.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: { is_active: false, restored_at } })
+      res.json(result)
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
+
+}

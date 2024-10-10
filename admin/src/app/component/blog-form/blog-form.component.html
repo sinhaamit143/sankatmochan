@@ -3,7 +3,7 @@
       <div class="col-md-8 col-lg-6">
         <div class="form-container">
           <h2>Create a New Blog Post</h2>
-          <form [formGroup]="myForm" (ngSubmit)="onSubmit()" id="blog_form">
+          <form [formGroup]="myForm" (ngSubmit)="uploadImage()" id="blog_form">
 
             <!-- Drag and Drop Image Upload -->
               <div class="mb-3">
@@ -15,7 +15,7 @@
               <ngx-dropzone-image-preview 
                 ngProjectAs="ngx-dropzone-preview" 
                 [removable]="true" 
-                *ngFor="let f of files" 
+                *ngFor="let f of image" 
                 [file]="f"
                 (removed)="onRemove(f)">
               </ngx-dropzone-image-preview>
@@ -55,8 +55,6 @@
               
               <button type="submit" class="btn btn-primary" >Submit</button>
             </div>
-
-            
           </form>
         </div>
       </div>

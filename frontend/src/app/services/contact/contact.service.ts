@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export interface ContactForm {
   name: string;
@@ -24,7 +25,7 @@ export class ContactService {
 
   onContactSave(contactForm: ContactForm) {
     console.log(contactForm);
-    return this.httpClient.post('http://localhost:5000/contact', contactForm);
+    return this.httpClient.post(`${environment.url}/contact`, contactForm);
   }
 }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from '../token/token.service'; 
+import { environment } from 'src/environments/environment';
 
 export interface ContactForm {
   _id: string;
@@ -16,7 +17,7 @@ export interface ContactForm {
 })
 export class ContactService {
 
-  private apiUrl = 'http://localhost:5000/contact';
+  private apiUrl = `${environment.url}/contact`;
   private token = 'Token'; // You should replace this with the actual token
 
   constructor(private httpClient: HttpClient,private tokenService: TokenService) {}

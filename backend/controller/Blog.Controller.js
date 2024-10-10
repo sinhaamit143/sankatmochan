@@ -1,7 +1,7 @@
 const createError = require('http-errors')
-const Model = require('../Models/User.Model')
+const Model = require('../Models/Blog.Model')
 const mongoose = require('mongoose')
-const ModelName =  'User'
+const ModelName = 'blog'
 
 module.exports = {
 
@@ -38,7 +38,90 @@ module.exports = {
       next(error)
     }
   },
+  publicGet: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      if (!id) {
+        throw createError.BadRequest('Invalid Parameters')
+      }
+      // const result = await Model.findById({ _id: mongoose.Types.ObjectId(id) })
+      const result = await Model.aggregate([
+        {
+          $match: { _id: mongoose.Types.ObjectId(id) }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'created_by',
+            foreignField: '_id',
+            as: 'created_by'
+          }
+        },
+        {
+          $unwind: {
+            path: '$created_by',
+            preserveNullAndEmptyArrays: true
+          }
+        }
+      ])
+      if (!result) {
+        throw createError.NotFound(`No ${ModelName} Found`)
+      }
+      res.send({
+        success: true, 
+        data: result.pop()
+      })
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
   list: async (req, res, next) => {
+    try {
+      const { name, is_active, page, limit, sort } = req.query
+      const _page = page ? parseInt(page) : 1
+      const _limit = limit ? parseInt(limit) : 20
+      const _skip = (_page - 1) * _limit
+      const _sort = sort ? sort : '+name'
+      const query = {};
+      if (name) {
+        query.name = new RegExp(name, 'i')
+      }
+      console.log(req.user.id)
+      query.created_by = req.user._id
+      query.is_active = true;
+      const result = await Model.aggregate([
+        {
+          $match: query
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'created_by',
+            foreignField: '_id',
+            as: 'created_by'
+          }
+        },
+        {
+          $unwind: {
+            path: '$created_by',
+            preserveNullAndEmptyArrays: true
+          }
+        },
+        {
+          $skip: _skip
+        },
+        {
+          $limit: _limit
+        }
+      ])
+      res.json(result)
+      return
+    } catch (error) {
+      next(error)
+    }
+  },
+  publicList: async (req, res, next) => {
     try {
       const { name, is_active, page, limit, sort } = req.query
       const _page = page ? parseInt(page) : 1
@@ -53,6 +136,20 @@ module.exports = {
       const result = await Model.aggregate([
         {
           $match: query
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'created_by',
+            foreignField: '_id',
+            as: 'created_by'
+          }
+        },
+        {
+          $unwind: {
+            path: '$created_by',
+            preserveNullAndEmptyArrays: true
+          }
         },
         {
           $skip: _skip

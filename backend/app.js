@@ -1,52 +1,46 @@
-require('dotenv').config(); // Load environment variables from .env file
-// Import required modules
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const express = require('express')
+const morgan = require('morgan')
+const createError = require('http-errors')
+require('dotenv').config()
+require('./helpers/init_mongodb')
+const cors = require('cors')
+const path = require('path')
 
-// Import routes
-const userRoutes = require('./routes/user.routes.js');
-const contactRoutes = require('./routes/contact.routes.js');
-const blogRoutes = require('./routes/blogs.routes.js');
-
-// Create an Express app
 const app = express();
+app.use(cors())
+app.use(morgan('dev'))   
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
-const AdminDatabase = process.env.DATABASE;
-mongoose.connect(AdminDatabase);
+app.use('/auth', require('./Routes/Auth.Route'))
+app.use('/contact', require('./Routes/Contact.Route'))
+app.use('/user', require('./Routes/User.Route'))
+app.use('/file', require('./Routes/File.Route'))
+app.use('/blog', require('./Routes/Blog.Route'))
 
-// Use body-parser to parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join("backend/images"))); 
 
-// Use body-parser to parse requests of content-type - application/json
-app.use(bodyParser.json());
-
-// Enable CORS
-app.use(cors());
-
-// Use Express JSON parser
-app.use(express.json());
-app.use('/images', express.static('uploads'));
-
-// Use authentication routes
-app.use('/admin', userRoutes);
-
-// Define a simple route
-app.get('/', (req, res) => {
-  res.json({
-    "message": "Welcome to contact application. Take contact quickly. Organize and keep track of all your contact."
-  });
+app.get('/',  async (req,res,next) =>{
+    res.send("hello .....")
 });
 
-// Use contact routes
-contactRoutes(app);
+app.use(async (req,res,next)=>{  
+    next(createError.NotFound('This route does not exist '));
+});
 
-// Use blog routes
-blogRoutes(app);
+app.use((err,req,res,next)=>{
+    res.status(err.status || 500)
+    res.send({
+        error:{
+            status: err.status || 500,
+            message: err.message,
+        }
+    })
+});
 
-// Start the server on port 5000
-const port = process.env.PORT;
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
+
+const PORT = process.env.PORT || 4000
+
+app.listen(PORT,() =>{
+    console.log(`Server Running on port ${PORT}`)
 });

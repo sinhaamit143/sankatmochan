@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from '../token/token.service';
+import { environment } from 'src/environments/environment';
 
 export interface BlogForm {
   _id: string;
@@ -42,22 +43,22 @@ export class BlogService {
     formData.append('description', blogForm.description);
     formData.append('website', blogForm.website);
   
-    return this.httpClient.post('http://localhost:5000/blogs', formData, { headers }); // Pass the headers
+    return this.httpClient.post(`${environment.url}/blogs`, formData, { headers }); // Pass the headers
   }
 
   onBlogGetAll() {
-    return this.httpClient.get('http://localhost:5000/blogs');
+    return this.httpClient.get(`${environment.url}/blogs`);
   }
 
   onBlogDelete(id: string) {
     const token = this.tokenService.getToken();
   const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
 
-    return this.httpClient.delete('http://localhost:5000/blogs/' + id, { headers });
+    return this.httpClient.delete(`${environment.url}/blogs/` + id, { headers });
   }
 
   onBlogFindOne(id: string) {
-    return this.httpClient.get('http://localhost:5000/blogs/' + id);
+    return this.httpClient.get(`${environment.url}/blogs/` + id);
   }
 
   onBlogUpdate(id: string, blogForm: BlogForm) {
@@ -71,13 +72,13 @@ export class BlogService {
     formData.append('description', blogForm.description);
     formData.append('website', blogForm.website);
   
-    return this.httpClient.put('http://localhost:5000/blogs/' + id, formData, { headers });
+    return this.httpClient.put(`${environment.url}/blogs/` + id, formData, { headers });
   }
 
   onBlogDeleteAll() {
     const token = this.tokenService.getToken();
   const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
 
-    return this.httpClient.delete('http://localhost:5000/blogs', { headers });
+    return this.httpClient.delete(`${environment.url}/blogs`, { headers });
   }
 }
