@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BlogForm, BlogService } from 'src/app/services/blogs/blog.service';
+import { BlogService } from 'src/app/services/blogs/blog.service';
 
 @Component({
   selector: 'app-blog-form',
@@ -11,27 +11,11 @@ import { BlogForm, BlogService } from 'src/app/services/blogs/blog.service';
 export class BlogFormComponent implements OnInit {
 
   myForm!: FormGroup; // Declare myForm here
-  file: File | null = null;
   isLoading = false;
-  
-files: any []=[]
+  files: File[] = []; // Store files
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private _blogFormService: BlogService) { 
+  constructor(private fb: FormBuilder, private http: HttpClient, private _blogFormService: BlogService) {
     this.myForm = this.fb.group({
-      file: ['']
-    });
-  }
-
-  onFileSelect(event: any) {
-    const file = event.target.files[0];
-    this.myForm.patchValue({
-      file: file
-    });
-  }
-  imagePreview: string | ArrayBuffer | null = null;
-
-  ngOnInit() {
-    this.myForm = this.fb.group({ // Initialize myForm here
       image: ['', Validators.required],
       category: ['', Validators.required],
       title: ['', Validators.required],
@@ -40,20 +24,26 @@ files: any []=[]
     });
   }
 
+  ngOnInit() {
+    // No need to reinitialize myForm here
+  }
+
   onSubmit() {
-    if (this.myForm.valid && this.file) {
+    if (this.myForm.valid && this.files.length > 0) { // Check if files exist
       this.isLoading = true;
       const formData = new FormData();
-  
-      formData.append('image', this.file, this.file.name);
+
+      this.files.forEach(file => {
+        formData.append('image', file, file.name); // Add all files
+      });
       formData.append('category', this.myForm.value.category);
       formData.append('title', this.myForm.value.title);
       formData.append('description', this.myForm.value.description);
       formData.append('website', this.myForm.value.website);
-  
+
       // Get the token (you may have it stored in localStorage or a service)
       const token = localStorage.getItem('x-auth-token') || '';
-  
+
       // Include the token in the headers
       this.http.post("http://localhost:5000/blogs", formData, {
         headers: {
@@ -63,16 +53,9 @@ files: any []=[]
         (res) => {
           console.log(res);
           alert("Blogs created successfully");
-          this.myForm?.reset();
-          this.imagePreview = null;
-          this.file = null;
+          this.myForm.reset(); // Reset the form
+          this.files = []; // Clear the files array
           this.isLoading = false;
-  
-          // Clear the file input field
-          const fileInput = document.getElementById('blogImage') as HTMLInputElement;
-          if (fileInput) {
-            fileInput.value = '';
-          }
         },
         (error) => {
           console.error(error);
@@ -85,51 +68,32 @@ files: any []=[]
       this.isLoading = false;
     }
   }
-  
 
-// This function handles file selection from the drag-and-drop area
-// This function handles file selection from the drag-and-drop area
-onSelect(event: any): void {
-  const file: File = event.addedFiles[0]; // Get the first added file
-  if (file) {
-    this.file = file; // Store the file
+  // This function handles file selection from the drag-and-drop area
+  onSelect(event: any): void {
+    const file: File = event.addedFiles[0]; // Get the first added file
+    if (file) {
+      this.files.push(file); // Store the file
 
-    // Update the form with the selected file
-    this.myForm.patchValue({
-      image: file // Update the 'image' form field
-    });
-    this.myForm.get('image')?.updateValueAndValidity(); // Trigger validation
-
-    // Create a preview of the image using FileReader
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result;
-    };
-    reader.readAsDataURL(file);
-
-    // Add the file to the array for display in the dropzone area
-    this.files.push(file);
-  }
-}
-
-// This function handles the removal of a selected file
-onRemove(event: any): void {
-  const index = this.files.indexOf(event);
-  if (index >= 0) {
-    this.files.splice(index, 1);
-
-    // Reset the file if the removed file is the one currently selected
-    if (this.file === event) {
-      this.file = null;
-      this.imagePreview = null;
+      // Update the form with the selected file
       this.myForm.patchValue({
-        image: null // Clear the 'image' form field
+        image: file // Update the 'image' form field
       });
       this.myForm.get('image')?.updateValueAndValidity(); // Trigger validation
     }
   }
-}
 
-
-
+  // This function handles the removal of a selected file
+  onRemove(file: File): void {
+    const index = this.files.indexOf(file);
+    if (index >= 0) {
+      this.files.splice(index, 1); // Remove the file
+      if (this.files.length === 0) {
+        this.myForm.patchValue({
+          image: null // Clear the 'image' form field if no files remain
+        });
+        this.myForm.get('image')?.updateValueAndValidity(); // Trigger validation
+      }
+    }
+  }
 }
