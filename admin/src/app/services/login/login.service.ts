@@ -25,7 +25,7 @@ export class LoginService {
 
   // Handle login and store token
   onLoginSubmit(loginForm: LoginForm): Observable<any> {
-    return this.httpClient.post(`${environment.url}/admin/login`, loginForm).pipe(
+    return this.httpClient.post(`${environment.url}/auth/login`, loginForm).pipe(
       tap((response: any) => {
         if (response && response.token) {
           //this.storeToken(response.token);
@@ -36,7 +36,7 @@ export class LoginService {
 
   // Handle user registration
   onRegisterSubmit(registerForm: RegisterForm): Observable<any> {
-    return this.httpClient.post(`${environment.url}/admin/register`, registerForm);
+    return this.httpClient.post(`${environment.url}/auth/register`, registerForm);
   }
 
   // Store the token in localStorage

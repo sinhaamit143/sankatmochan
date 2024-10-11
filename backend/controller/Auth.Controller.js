@@ -1,6 +1,5 @@
 const createError = require('http-errors')
 const User = require('../Models/User.Model')
-const Role = require('../Models/Role.Model')
 const {
     signAccessToken,
     signRefreshToken,
@@ -19,8 +18,6 @@ module.exports = {
           result.created_by = req.user ? req.user.username : 'unauth'
           result.updated_by = req.user ? req.user.username : 'unauth'
           result.is_approved = true
-        //   const role = await Role.findOne({name:"User"}, {_id:1})
-        //   result.role = role._id
           const doesExist = await User.findOne({ email: result.email })
           if (doesExist)
           throw createError.Conflict(`${result.email} is already been registered`)

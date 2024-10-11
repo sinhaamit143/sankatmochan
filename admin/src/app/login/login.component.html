@@ -5,7 +5,8 @@
       <div class="logo-container">
         <a href="index.html" class="logo align-items-center">
           <img src="assets/images/logos/logod.png" alt="Logo" height="80px" width="80px">
-          <span class="d-none d-lg-block">Sankat Mochan</span>
+          <span class="d-lg-block">Sankat Mochan</span>
+          <span class="d-lg-block">Login</span>
         </a>
       </div>
 
@@ -13,7 +14,6 @@
         <div class="form-container">
           <!-- Login Form -->
           <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="login">
-            <h2>Login</h2>
             <div class="login__field form-group">
               <i class="Login__icon fas fa-user"></i>
               <input id="loginEmail" formControlName="email" type="email" class="login__input form-control" placeholder="User name / Email" required />
@@ -26,9 +26,7 @@
               <span class="button__text">Log In Now</span>
               <i class="button__icons fas fa-chevron-right"></i>
             </button>
-            <p class="toggle-auth" style="color: #f4c8c8;">
-              Don't have an account? <a (click)="toggleMode()">Create a new account</a>
-            </p>
+
           </form>
 
           <!-- Register Form -->

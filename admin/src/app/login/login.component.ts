@@ -51,10 +51,9 @@ export class LoginComponent {
           if (response) {
             console.log('Login successful', response);
             alert('Login successful!');
-            this.tokenService.setToken(response.token);
-          this.tokenService.setUser({name:response.name,email:response.email});
-            // window.location.href = 'http://localhost:4200/dashboard';  // Redirect to full URL
-            this.router.navigate(['/dashboard']);  // Redirect to dashboard after successful login
+          //   this.tokenService.setToken(response.token);
+          // this.tokenService.setUser({name:response.name,email:response.email});
+            this.router.navigate(['/dashboard']); 
           }
         });
     }

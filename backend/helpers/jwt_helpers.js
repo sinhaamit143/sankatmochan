@@ -1,7 +1,6 @@
 const JWT = require('jsonwebtoken')
 const createError = require('http-errors')
 const User = require('../Models/User.Model')
-const Role = require('../Models/Role.Model')
 const mongoose = require('mongoose')
 
 module.exports = {
@@ -36,9 +35,7 @@ module.exports = {
         return next(createError.Unauthorized(message))
       }
       const user = await User.findOne({ _id: mongoose.Types.ObjectId(payload.aud) })
-      const role = await Role.findOne({ _id: mongoose.Types.ObjectId(user.role) })
       req.user = user
-      req.role = role
 
       req.payload = payload
       next()
