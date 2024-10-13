@@ -14,31 +14,42 @@ export class TokenService {
 
 
   setToken(token: string): void {
-    localStorage.setItem('Token', token);
-    
+    if (token && typeof token === 'string') {
+      localStorage.setItem('token', token);
+      console.log('Token set:', token);
+    } else {
+      console.log('Invalid token specified: must be a string');
+    }
   }
-
-  getToken() {
-    const token = localStorage.getItem('Token');
-    this.token = token;
-    return token;
+  getToken(): string | null {
+    const token = localStorage.getItem('token');
+    console.log('Retrieved token:', token); // Log token to verify it's being retrieved
+    console.log('Retrieved token type:', typeof token); // Log token type
+    if (token && typeof token === 'string') {
+      const decodedToken = jwtDecode(token);
+      console.log('Decoded token:', decodedToken); // Log decoded token
+      return token;
+    } else {
+      return null;
+    }
   }
 
   deleteToken() {
-    localStorage.removeItem('Token');
+    localStorage.removeItem('token');
     this.route.navigate(['/login'])
   }
 
-  setUser(user) {
+  setUser (user: any): void {
     localStorage.setItem('user', JSON.stringify(user));
   }
 
-  getUser() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user;
+  getUser(): any {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
 
   decodeToken() {
+    const token = this.getToken();
     if (this.getToken()) {
       this.decodedToken = jwtDecode(this.token);
     }
@@ -50,15 +61,14 @@ export class TokenService {
 
   getExpiryTime() {
     this.decodeToken();
-    return this.decodedToken ? this.decodedToken.exp : null;
+    return this.decodedToken ? this.decodedToken.exp * 1000 : null;
   }
-
+  
   isTokenExpired(): boolean {
-    const expiryTime: any = this.getExpiryTime();
-    if (expiryTime) {
-      return 1000 * expiryTime - new Date().getTime() < 5000;
-    } else {
-      return false;
-    }
+    const token = this.getToken();
+    if (!token) return true;
+
+    const expiry = this.getExpiryTime();
+    return expiry ? Date.now() >= expiry : true; 
   }
 }

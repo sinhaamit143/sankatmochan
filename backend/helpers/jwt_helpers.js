@@ -35,11 +35,14 @@ module.exports = {
         return next(createError.Unauthorized(message))
       }
       const user = await User.findOne({ _id: mongoose.Types.ObjectId(payload.aud) })
-      req.user = user
+      if (!user) {
+        return next(createError.NotFound('User not found'));
+      }
 
+      req.user = user
       req.payload = payload
       next()
-    })
+    });
   },
   signRefreshToken: (userId) => {
     return new Promise((resolve, reject) => {

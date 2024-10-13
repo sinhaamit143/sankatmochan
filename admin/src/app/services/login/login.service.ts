@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { tap } from 'rxjs/operators'; // Import tap operator
 
 export interface LoginForm {
   email: string;
@@ -28,7 +28,7 @@ export class LoginService {
     return this.httpClient.post(`${environment.url}/auth/login`, loginForm).pipe(
       tap((response: any) => {
         if (response && response.token) {
-          //this.storeToken(response.token);
+          this.saveToken(response.token);
         }
       })
     );
@@ -40,13 +40,15 @@ export class LoginService {
   }
 
   // Store the token in localStorage
-  // private storeToken(token: string): void {
-  //   localStorage.setItem(this.tokenKey, token);
-  // }
+  public saveToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+  }
 
   // Retrieve token from localStorage
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    const token = localStorage.getItem(this.tokenKey);
+    console.log('Token from local storage:', token);
+    return token;
   }
 
   // Clear token on logout

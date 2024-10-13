@@ -10,7 +10,7 @@ module.exports = {
       const data = req.body
       data.created_by = req.user ? req.user._id : 'unauth'
       data.updated_by = req.user ? req.user._id : 'unauth'
-      data.defaultSpace = req.user.defaultSpace
+      data.defaultSpace = req.user && req.user.defaultSpace ? req.user.defaultSpace : null;
       data.created_at = Date.now()
       const newData = new Model(data)
       const result = await newData.save()
@@ -40,16 +40,21 @@ module.exports = {
   },
   list: async (req, res, next) => {
     try {
-      const { name, is_active, page, limit, sort } = req.query
-      const _page = page ? parseInt(page) : 1
-      const _limit = limit ? parseInt(limit) : 20
-      const _skip = (_page - 1) * _limit
-      const _sort = sort ? sort : '+name'
+      const { name, page, limit, sort } = req.query;
+      const _page = page ? parseInt(page) : 1;
+      const _limit = limit ? parseInt(limit) : 20;
+      const _skip = (_page - 1) * _limit;
+      const _sort = sort ? sort : '+name';
       const query = {};
+  
+      // Check if name is provided
       if (name) {
-        query.name = new RegExp(name, 'i')
+        query.name = new RegExp(name, 'i');
       }
-      query.is_active = true;
+      
+      
+      // const query = { is_active: true };  // This line should be removed or commented out
+  
       const result = await Model.aggregate([
         {
           $match: query
@@ -60,13 +65,15 @@ module.exports = {
         {
           $limit: _limit
         }
-      ])
-      res.json(result)
-      return
+      ]);
+  
+      res.json(result);
+      return;
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
+  
   update: async (req, res, next) => {
     try {
       const { id } = req.params
@@ -102,25 +109,25 @@ module.exports = {
   },
   restore: async (req, res, next) => {
     try {
-      const { id } = req.params
+      const { id } = req.params;
       if (!id) {
-        throw createError.BadRequest('Invalid Parameters')
+        throw createError.BadRequest('Invalid Parameters');
       }
-      const dataToBeDeleted = await Model.findOne({ _id: mongoose.Types.ObjectId(id) }, { name: 1 }).lean()
-      if (!dataToBeDeleted) {
-        throw createError.NotFound(`${ModelName} Not Found`)
+      const dataToBeRestored = await Model.findOne({ _id: mongoose.Types.ObjectId(id), is_active: false }).lean();
+      if (!dataToBeRestored) {
+        throw createError.NotFound(`${ModelName} Not Found or Already Active`);
       }
-      const dataExists = await Model.findOne({ name: dataToBeDeleted.name, is_active: false }).lean()
-      if (dataExists) {
-        throw createError.Conflict(`${ModelName} already exists`)
-      }
-      const restored_at = Date.now()
-      const result = await Model.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: { is_active: false, restored_at } })
-      res.json(result)
-      return
+      const restored_at = Date.now();
+      const result = await Model.updateOne(
+        { _id: mongoose.Types.ObjectId(id) },
+        { $set: { is_active: true, restored_at } }
+      );
+      res.json({ success: true, message: `${ModelName} restored successfully`, result });
+      return;
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
+  
 
 }

@@ -51,14 +51,14 @@ export class LoginComponent {
           if (response) {
             console.log('Login successful', response);
             alert('Login successful!');
-          //   this.tokenService.setToken(response.token);
-          // this.tokenService.setUser({name:response.name,email:response.email});
+            this.tokenService.setToken(response.accessToken);
+            this.tokenService.setUser(response.user);
             this.router.navigate(['/dashboard']); 
           }
         });
     }
   }
-  
+
   onRegisterSubmit(): void {
     if (this.registerForm.valid) {
       this.loginService.onRegisterSubmit(this.registerForm.value)

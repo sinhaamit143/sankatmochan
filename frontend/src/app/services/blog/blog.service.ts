@@ -10,12 +10,14 @@ export class BlogService {
   constructor(private httpClient: HttpClient) {}
 
 
-  onBlogGetAll() {
-    return this.httpClient.get(`${environment.url}/blogs`);
+  onBlogGetAllPublic() {
+    return this.httpClient.get(`${environment.url}/blogs/public`);
   }
+  
 
+  // Fetch a single blog by ID
   onBlogFindOne(id: string) {
-    return this.httpClient.get(`${environment.url}/blogs/` + id);
+    return this.httpClient.get(`${environment.url}/blogs/get/${id}`);
   }
 
 

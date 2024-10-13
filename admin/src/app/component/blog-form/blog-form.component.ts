@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BlogService } from 'src/app/services/blogs/blog.service';
 import { FileService } from 'src/app/services/files/files.service';
+import { TokenService } from 'src/app/services/token/token.service'; // Import TokenService
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -13,15 +14,17 @@ import { environment } from 'src/environments/environment';
 export class BlogFormComponent implements OnInit {
   myForm!: FormGroup;
   isLoading = false;
-  image: any = [];
+  image: File[] = []; // Change to an array of File
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private fileServ: FileService
+    private fileServ: FileService,
+    private blogService: BlogService,
+    private tokenService: TokenService // Inject TokenService
   ) {
     this.myForm = this.fb.group({
-      image: ['', Validators.required],
+      image: [null, Validators.required],
       category: ['', Validators.required],
       title: ['', Validators.required],
       description: ['', Validators.required],
@@ -32,18 +35,18 @@ export class BlogFormComponent implements OnInit {
   ngOnInit() {}
 
   uploadImage() {
-    if (this.image[0]) {
+    if (this.image.length > 0) { // Check if there is at least one file
       this.fileServ.uploadFile(this.image[0]).subscribe(
         (res: any) => {
-          if (res.type == HttpEventType.Response) {
+          if (res.type === HttpEventType.Response) {
             const body: any = res.body;
-            this.image = body.file.path;
+            const imagePath = body.file.path; // Assuming this is the correct response structure
             alert('Image Uploaded Successfully');
-            this.onSubmit(this.image)
+            this.onSubmit(imagePath); // Pass the string path to onSubmit
           }
         },
         (error) => {
-          alert(error.message);
+          alert(`Error uploading image: ${error.message}`);
         }
       );
     } else {
@@ -51,35 +54,36 @@ export class BlogFormComponent implements OnInit {
     }
   }
 
-  onSubmit(image) {
-    if (this.myForm.valid && image.length > 0) {
+  onSubmit(imagePath: string) {
+    if (this.myForm.valid) { // Check if image array is not empty
       this.isLoading = true;
       const formData = new FormData();
-      formData.append('image', image, this.image[0].name);
+      
+      formData.append('image', this.image[0], this.image[0].name); // Append the File object directly
       formData.append('category', this.myForm.value.category);
       formData.append('title', this.myForm.value.title);
       formData.append('description', this.myForm.value.description);
       formData.append('website', this.myForm.value.website);
 
-      const token = localStorage.getItem('x-auth-token') || '';
-
+      const token = this.tokenService.getToken() || ''; // Use TokenService
+      console.log('Token:', this.tokenService.getToken());
       this.http
         .post(`${environment.url}/blogs`, formData, {
           headers: {
-            'x-auth-token': token,
+            'x-auth-token': token, // Send the token in headers
           },
         })
         .subscribe(
           (res) => {
             console.log(res);
-            alert('Blogs created successfully');
+            alert('Blog created successfully');
             this.myForm.reset();
-            this.image = [];
+            this.image = []; // Reset image array
             this.isLoading = false;
           },
           (error) => {
             console.error(error);
-            alert('Error sending Blog data. Please try again.');
+            alert('Error sending blog data. Please try again.');
             this.isLoading = false;
           }
         );
@@ -92,22 +96,17 @@ export class BlogFormComponent implements OnInit {
   onSelect(event: any): void {
     const file: File = event.addedFiles[0];
     if (file) {
-      this.image.push(file);
-    } else {
-      this.image = [];
+      this.image = [file]; // Store the file in an array
+      this.myForm.patchValue({ image: file });
+      this.myForm.get('image')?.updateValueAndValidity();
     }
   }
 
   onRemove(file: File): void {
-    const index = this.image.indexOf(file);
-    if (index >= 0) {
-      this.image.splice(index, 1);
-      if (this.image.length === 0) {
-        this.myForm.patchValue({
-          image: null,
-        });
-        this.myForm.get('image')?.updateValueAndValidity();
-      }
+    if (this.image.includes(file)) {
+      this.image = [];
+      this.myForm.patchValue({ image: null });
+      this.myForm.get('image')?.updateValueAndValidity();
     }
   }
 }

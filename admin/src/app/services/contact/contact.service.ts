@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from '../token/token.service'; 
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 export interface ContactForm {
   _id: string;
@@ -18,17 +19,19 @@ export interface ContactForm {
 export class ContactService {
 
   private apiUrl = `${environment.url}/contact`;
-  private token = 'Token'; // You should replace this with the actual token
+  private token = 'token'; // You should replace this with the actual token
 
   constructor(private httpClient: HttpClient,private tokenService: TokenService) {}
 
   // ... (other methods)
 
-  onContactGetAll() {
+  onContactGetAll(): Observable<ContactForm[]> {
     const token = this.tokenService.getToken(); // Retrieve token from TokenService
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
-    return this.httpClient.get(this.apiUrl, { headers });
+    console.log('Token used for request:', token); // Log the token for debugging
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.httpClient.get<ContactForm[]>(this.apiUrl, { headers });
   }
+  
   
   onContactDelete(id: string) {
     const token = this.tokenService.getToken();

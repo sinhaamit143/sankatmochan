@@ -1,3 +1,4 @@
+// top-selling.component.ts
 import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { ContactService } from 'src/app/services/contact/contact.service';
@@ -17,38 +18,46 @@ export class TopSellingComponent implements OnInit {
       this.collection.push(`item ${i}`);
     }
   }
-  getData:any
+  getData: any[] = [];
   ngOnInit() {
     this.fetchAllContacts();
   }
 
-    // Fetch all contacts
-    fetchAllContacts() {
-      this._contactService.onContactGetAll().subscribe(res => {
-        this.getData = res;
-      });
-    }
 
-  editContact(contact: ContactService) { // Specify the type as 'Contact'
+// Fetch all contacts
+fetchAllContacts() {
+  console.log('Fetching all contacts...');
+  this._contactService.onContactGetAll().subscribe((res: any[]) => {
+    console.log('Response data:', res);
+    console.log('Response data length:', (res as any[]).length);
+    console.log('Response data type:', typeof res);
+    this.getData = res;
+    console.log('Data length after assignment::', this.getData.length);
+  }, error => {
+    console.error('Error fetching contacts:', error);
+  });
+}
+
+  editContact(contact: any) { // Specify the type as 'Contact'
     console.log('Edit contact:', contact);
     // Add your edit logic here
   }
 
   onDelete(id: any){
-    this._contactService.onContactDelete(id).subscribe(res =>{
+    this._contactService.onContactDelete(id).subscribe((res: any[]) =>{
       console.log(res)
-      this._contactService.onContactGetAll().subscribe( res=>{
+      this._contactService.onContactGetAll().subscribe((res: any[]) =>{
         this.getData=res
       })
-  
+    
     })
   }
 
-    // Delete all contacts
-    onDeleteAll() {
-      this._contactService.onContactDeleteAll().subscribe(res => {
-        console.log('All contacts deleted', res);
-        this.fetchAllContacts(); // Refresh the contact list after deleting all
-      });
-    }
+  // Delete all contacts
+  onDeleteAll() {
+    this._contactService.onContactDeleteAll().subscribe(res => {
+      console.log('All contacts deleted', res);
+      this.fetchAllContacts(); // Refresh the contact list after deleting all
+    });
+  }
 }

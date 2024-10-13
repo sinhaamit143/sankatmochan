@@ -28,7 +28,7 @@ export class BlogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._blogService.onBlogGetAll().subscribe(res => {
+    this._blogService.onBlogGetAllPublic().subscribe(res => { // Call the public route
       this.getData = res;
     });
   }

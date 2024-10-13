@@ -16,25 +16,15 @@ export interface BlogForm {
   providedIn: 'root'
 })
 export class BlogService {
-  isAgreedModal() {
-    throw new Error('Method not implemented.');
-  }
-  setAgreed(arg0: boolean) {
-    throw new Error('Method not implemented.');
-  }
-
   constructor(private httpClient: HttpClient, private tokenService: TokenService) {}
 
-  // Store the token securely (e.g., in a service)
-  private token: string | null = null;
-
-  setToken(newToken: string) {
-    this.token = newToken;
+  private getAuthorizationHeaders(): HttpHeaders {
+    const token = this.tokenService.getToken();
+    return new HttpHeaders().set('Authorization', `Bearer ${token ? token : ''}`);
   }
 
   onBlogSave(blogForm: BlogForm) {
-    const token = this.tokenService.getToken();
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
+    const headers = this.getAuthorizationHeaders();
 
     const formData = new FormData();
     formData.append('image', blogForm.image);
@@ -42,28 +32,27 @@ export class BlogService {
     formData.append('title', blogForm.title);
     formData.append('description', blogForm.description);
     formData.append('website', blogForm.website);
-  
-    return this.httpClient.post(`${environment.url}/blogs`, formData, { headers }); // Pass the headers
+
+    return this.httpClient.post(`${environment.url}/blogs`, formData, { headers });
   }
 
   onBlogGetAll() {
-    return this.httpClient.get(`${environment.url}/blogs`);
+    const headers = this.getAuthorizationHeaders(); // Include headers if needed for this route
+    return this.httpClient.get(`${environment.url}/blogs`, { headers });
   }
 
   onBlogDelete(id: string) {
-    const token = this.tokenService.getToken();
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
-
-    return this.httpClient.delete(`${environment.url}/blogs/` + id, { headers });
+    const headers = this.getAuthorizationHeaders();
+    return this.httpClient.delete(`${environment.url}/blogs/${id}`, { headers });
   }
 
+  // For public access to blog by ID, no need for token
   onBlogFindOne(id: string) {
-    return this.httpClient.get(`${environment.url}/blogs/` + id);
+    return this.httpClient.get(`${environment.url}/blogs/get/${id}`); // Public route
   }
 
   onBlogUpdate(id: string, blogForm: BlogForm) {
-    const token = this.tokenService.getToken();
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
+    const headers = this.getAuthorizationHeaders();
 
     const formData = new FormData();
     formData.append('image', blogForm.image);
@@ -71,14 +60,12 @@ export class BlogService {
     formData.append('title', blogForm.title);
     formData.append('description', blogForm.description);
     formData.append('website', blogForm.website);
-  
-    return this.httpClient.put(`${environment.url}/blogs/` + id, formData, { headers });
+
+    return this.httpClient.put(`${environment.url}/blogs/${id}`, formData, { headers });
   }
 
   onBlogDeleteAll() {
-    const token = this.tokenService.getToken();
-  const headers = new HttpHeaders().set('Authorization', `Bearer ${this.token ? this.token : ''}`);
-
+    const headers = this.getAuthorizationHeaders();
     return this.httpClient.delete(`${environment.url}/blogs`, { headers });
   }
 }
