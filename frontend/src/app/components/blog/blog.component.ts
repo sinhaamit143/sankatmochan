@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BlogService } from 'src/app/services/blog/blog.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-blog',
@@ -9,12 +10,14 @@ import { BlogService } from 'src/app/services/blog/blog.service';
 })
 export class BlogComponent implements OnInit {
   getData: any;
-  p: number = 1; // current page number
-  itemsPerPage: number = 6; // items per page
+  p: number = 1;
+  itemsPerPage: number = 6; 
   id: any;
   data: any;
+  env:any
 
   constructor(private _blogService: BlogService, private route: ActivatedRoute) {
+    this.env = environment.url;
     this.route.params.subscribe((param: any) => {
       this.id = param.id;
       if (this.id) {

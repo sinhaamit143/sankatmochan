@@ -13,7 +13,7 @@
       <div class="auth-container">
         <div class="form-container">
           <!-- Login Form -->
-          <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="login">
+          <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="submit()" class="login">
             <div class="login__field form-group">
               <i class="Login__icon fas fa-user"></i>
               <input id="loginEmail" formControlName="email" type="email" class="login__input form-control" placeholder="User name / Email" required />

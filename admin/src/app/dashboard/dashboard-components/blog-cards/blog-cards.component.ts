@@ -1,25 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-
-import { NgFor, NgIf } from '@angular/common';
-import { BlogService } from 'src/app/services/blogs/blog.service';
+import { ApiService } from 'src/app/services/api.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-blog-cards',
   templateUrl: './blog-cards.component.html'
 })
 export class BlogCardsComponent implements OnInit {
+  
   collection = [];
-  p: number = 1; // current page number
-  itemsPerPage: number = 4; // items per page
-  constructor(private _blogService:BlogService) {
+  p: number = 1; 
+  itemsPerPage: number = 4; 
+  getData:any
+
+  constructor(
+    private api : ApiService,
+    private as : AlertService
+  ) {
+
     for (let i = 1; i <= 100; i++) {
       this.collection.push(`item ${i}`);
     }
+
   }
-  getData:any
   ngOnInit() {
-    this._blogService.onBlogGetAll().subscribe( res=>{
-      this.getData=res
+    this.getBlogs()
+  }
+
+  getBlogs() {
+    this.api.get('blogs', {}).subscribe((res: any) => {
+      if (res) {
+        this.getData = res
+      } else {
+        this.as.warningToast(res.error.message)
+      }
     })
   }
+
 }

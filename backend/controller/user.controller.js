@@ -10,7 +10,6 @@ module.exports = {
       const data = req.body
       data.created_by = req.user ? req.user._id : 'unauth'
       data.updated_by = req.user ? req.user._id : 'unauth'
-      data.defaultSpace = req.user.defaultSpace
       data.created_at = Date.now()
       const newData = new Model(data)
       const result = await newData.save()

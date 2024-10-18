@@ -12,18 +12,17 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { Approutes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
-import { ContactService } from './services/contact/contact.service';
+import { ContactService } from './services/contact.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoginComponent } from './login/login.component';
 import { TokenInterceptor } from './services/token-interceptor';
 import { AuthService } from './services/auth.service';
-import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent },
   // Add other routes that should be protected by AuthGuard
 ];
 @NgModule({

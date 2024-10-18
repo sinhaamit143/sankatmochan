@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { ContactService, ContactForm } from 'src/app/services/contact/contact.service';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ContactForm, ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-table',

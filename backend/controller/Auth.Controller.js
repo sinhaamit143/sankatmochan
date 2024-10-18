@@ -21,7 +21,6 @@ module.exports = {
           const doesExist = await User.findOne({ email: result.email })
           if (doesExist)
           throw createError.Conflict(`${result.email} is already been registered`)
-          console.log(result)
           const user = new User(result)
           const savedUser = await user.save()
           const accessToken = await signAccessToken(savedUser.id)

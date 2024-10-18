@@ -1,5 +1,5 @@
 const createError = require('http-errors')
-const Model = require('../Models/Contact.Model')
+const Model = require('../Models/contact.model')
 const mongoose = require('mongoose')
 const ModelName =  'Role'
 
@@ -10,7 +10,6 @@ module.exports = {
       const data = req.body
       data.created_by = req.user ? req.user._id : 'unauth'
       data.updated_by = req.user ? req.user._id : 'unauth'
-      data.defaultSpace = req.user && req.user.defaultSpace ? req.user.defaultSpace : null;
       data.created_at = Date.now()
       const newData = new Model(data)
       const result = await newData.save()
@@ -46,15 +45,10 @@ module.exports = {
       const _skip = (_page - 1) * _limit;
       const _sort = sort ? sort : '+name';
       const query = {};
-  
-      // Check if name is provided
       if (name) {
         query.name = new RegExp(name, 'i');
       }
-      
-      
-      // const query = { is_active: true };  // This line should be removed or commented out
-  
+      query.is_active = true;
       const result = await Model.aggregate([
         {
           $match: query

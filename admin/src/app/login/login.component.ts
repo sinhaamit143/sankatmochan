@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { LoginService } from 'src/app/services/login/login.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { TokenService } from '../services/token/token.service'; 
 import { AuthService } from '../services/auth.service';
+import { TokenService } from '../services/token.service';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -20,10 +20,10 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService,
     private authService: AuthService,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private as : AlertService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -37,31 +37,24 @@ export class LoginComponent {
     });
   }
 
-  onLoginSubmit(): void {
+  submit() {
     if (this.loginForm.valid) {
-      this.loginService.onLoginSubmit(this.loginForm.value)
-        .pipe(
-          catchError(error => {
-            console.error('Login failed', error);
-            alert('Login failed. Please check your credentials and try again.');
-            return of(null);  // Return an empty observable to continue the stream
-          })
-        )
-        .subscribe(response => {
-          if (response) {
-            console.log('Login successful', response);
-            alert('Login successful!');
-            this.tokenService.setToken(response.accessToken);
-            this.tokenService.setUser(response.user);
-            this.router.navigate(['/dashboard']); 
-          }
-        });
+      this.authService.login(this.loginForm.value).subscribe((resp: any) => {
+        if (resp.success) {
+          this.tokenService.setToken(resp.accessToken, resp.refreshToken);
+          this.tokenService.setUser(resp.user);
+          this.router.navigate(['/dashboard']);
+          this.as.successToast("Login Successfully")
+        } else {
+          this.as.errorToast('Invalid Credentials')
+        }
+      })
     }
   }
 
   onRegisterSubmit(): void {
     if (this.registerForm.valid) {
-      this.loginService.onRegisterSubmit(this.registerForm.value)
+      this.authService.register(this.registerForm.value)
         .pipe(
           catchError(error => {
             console.error('Registration failed', error);

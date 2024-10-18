@@ -1,8 +1,8 @@
 // top-selling.component.ts
 import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { ContactService } from 'src/app/services/contact/contact.service';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationModule
+import { ContactService } from 'src/app/services/contact.service';
 @Component({
   selector: 'app-top-selling',
   standalone: true,

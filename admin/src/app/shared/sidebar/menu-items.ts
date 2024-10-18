@@ -67,7 +67,7 @@ export const ROUTES: RouteInfo[] = [
   //   submenu: []
   // },
   {
-    path: '/component/nav',
+    path: '/component/blog-list',
     title: 'Blogs List',
     icon: 'bi bi-pause-btn',
     class: '',

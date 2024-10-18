@@ -1,0 +1,59 @@
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table th, .table td {
+    vertical-align: middle;
+  }
+  
+  .table td.fs-4 {
+    max-width: 250px; /* Control the column width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+  }
+  
+  .table {
+    position: relative;
+    overflow: visible; /* Ensure parent elements don't clip the tooltip */
+  }
+  
+  /* Add this to your global styles or component-specific styles */
+  .custom-tooltip {
+    max-width: 300px; /* Adjust width as needed */
+    white-space: normal; /* Allow text to wrap */
+    position: absolute !important;
+  }
+  
+  
+  .tooltip {
+    z-index: 1050; /* Ensure tooltip appears above other elements */
+  }
+  
+  
+  .tooltip.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: auto !important;
+    top: auto !important;
+  }
+  
+  /* Fix the tooltip to ensure it wraps correctly and stays within the viewport */
+  .tooltip-inner {
+    max-width: 300px;  /* Increase the tooltip width */
+    white-space: pre-wrap;  /* Preserve whitespace and wrap */
+    word-break: break-word;  /* Break long words to prevent overflow */
+    background-color: #fff;  /* Optional: Background color for better readability */
+    color: #000;  /* Optional: Text color for better readability */
+    border: 1px solid #ccc;  /* Optional: Border for tooltip */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);  /* Optional: Subtle shadow for tooltip */
+  }
+  
+  
+  /* Adjust the tooltip arrow for better positioning */
+  .tooltip-arrow {
+    display: none; /* Hide arrow to avoid misalignment */
+  }

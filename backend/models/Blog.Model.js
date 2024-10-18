@@ -9,10 +9,13 @@ const TableSchema = new Schema({
     description:{
         type:String
     },
-    content:{
+    category:{
         type:String
     },
     image:{
+        type:String
+    },
+    link:{
         type:String
     },
     is_active: {

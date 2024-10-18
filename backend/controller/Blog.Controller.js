@@ -10,7 +10,6 @@ module.exports = {
       const data = req.body
       data.created_by = req.user ? req.user._id : 'unauth'
       data.updated_by = req.user ? req.user._id : 'unauth'
-      data.defaultSpace = req.user.defaultSpace
       data.created_at = Date.now()
       const newData = new Model(data)
       const result = await newData.save()
@@ -87,7 +86,6 @@ module.exports = {
       if (name) {
         query.name = new RegExp(name, 'i')
       }
-      console.log(req.user.id)
       query.created_by = req.user._id
       query.is_active = true;
       const result = await Model.aggregate([

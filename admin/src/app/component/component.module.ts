@@ -15,6 +15,7 @@ import { NgbdButtonsComponent } from './buttons/buttons.component';
 import { CardsComponent } from './card/card.component';
 import { TableComponent } from "./table/table.component";
 import { BlogFormComponent } from './blog-form/blog-form.component';
+import { EditBlogComponent } from './edit-blog/edit-blog.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { BlogFormComponent } from './blog-form/blog-form.component';
     NgxDropzoneModule
   ],
   declarations: [
-    BlogFormComponent
+    BlogFormComponent,
+    EditBlogComponent,
   ],
 })
 export class ComponentsModule { }

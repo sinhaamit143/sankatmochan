@@ -1,38 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AlertService } from './alert.service';
 import { environment } from 'src/environments/environment';
-import { LoginService } from './login/login.service';
-import { tap } from 'rxjs/operators'; // Import tap operator
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  as: any;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private ls: LoginService
+    private http :HttpClient,
+    private router:Router,
+    private as:AlertService,
+    private ts : TokenService
   ) { }
 
-  register(data: any) {
+  register(data:any) {
     return this.http.post(`${environment.url}/auth/register`, data);
   }
 
-  login(data: any) {
-    return this.http.post(`${environment.url}/auth/login`, data).pipe(
-      tap((response: any) => {
-        if (response && response.token) {
-          this.ls.saveToken(response.token); // Call public method to store token
-        }
-      })
-    );
+  login(data:any) {
+    return this.http.post(`${environment.url}/auth/login`, data);
   }
 
   isLoggedIn(): boolean {
-    return this.ls.isLoggedIn(); // This should return true if the token is stored
+    if (this.ts.getToken()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getCurrentUser() {
@@ -40,14 +38,18 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+   this.as.infoToast('You are logged out.');
+    this.cleanUserData();
+    this.router.navigate(['/login'])
+    // }
+    // );
   }
 
   cleanUserData() {
     localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.removeItem('Token');
+    localStorage.removeItem('refershToken');
     this.router.navigate(['/']);
   }
+
 }

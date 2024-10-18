@@ -9,6 +9,7 @@ import { NgbdButtonsComponent } from './buttons/buttons.component';
 import { CardsComponent } from './card/card.component';
 import { TableComponent } from './table/table.component';
 import { BlogFormComponent } from './blog-form/blog-form.component';
+import { EditBlogComponent } from './edit-blog/edit-blog.component';
 
 
 export const ComponentsRoutes: Routes = [
@@ -40,8 +41,8 @@ export const ComponentsRoutes: Routes = [
 				component: NgbdDropdownBasicComponent
 			},
 			{
-				path: 'nav',
-				component: NgbdnavBasicComponent
+				path: 'blog-list',
+				component: EditBlogComponent
 			},
 			{
 				path: 'blog-form',
