@@ -119,6 +119,7 @@ module.exports = {
       next(error)
     }
   },
+
   publicList: async (req, res, next) => {
     try {
       const { name, is_active, page, limit, sort } = req.query
@@ -162,6 +163,7 @@ module.exports = {
       next(error)
     }
   },
+  
   update: async (req, res, next) => {
     try {
       const { id } = req.params

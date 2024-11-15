@@ -59,7 +59,7 @@ module.exports = {
         } catch (error) {
             if (error.isJoi === true)
                 return next(createError.BadRequest('Invalid Email/Password'))
-            next(error)
+            next(error) 
         }
     },
 

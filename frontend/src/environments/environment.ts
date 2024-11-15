@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: '//'+ window.location.hostname+":5000"
+  url: '//'+ window.location.hostname
 };
 
 /*

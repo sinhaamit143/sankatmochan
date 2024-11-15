@@ -21,8 +21,12 @@ app.use("/blogs", require("./Routes/Blog.Route"));
 
 app.use("/uploads", express.static(path.join("backend/images")));
 
-app.get("/", async (req, res, next) => {
-  res.send("hello .....");
+
+// app.use("/auth/login",express.static(path.join(__dirname, 'public',"admin")));
+// app.use("/",express.static(path.join(__dirname, "public", "smlawfirm")));
+
+app.use('/', (req, res) => {
+  res.sendFile(path.join(__dirname,'./public/laa/index.html'));
 });
 
 app.use(async (req, res, next) => {
@@ -30,14 +34,19 @@ app.use(async (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(err.status || 500);
+  const urlVars = req.url.split('/')
+  console.log(urlVars)
+  if (urlVars[2] && urlVars[2] == 'download' && urlVars[3] == 'https:') {
+    return res.redirect(`${urlVars[3]}//${urlVars[5]}/${urlVars[6]}/${urlVars[7]}/${urlVars[8]}`)
+  }
+  res.status(err.status || 500)
   res.send({
     error: {
       status: err.status || 500,
       message: err.message,
     },
-  });
-});
+  })
+})
 
 const PORT = process.env.PORT || 5000;
 
