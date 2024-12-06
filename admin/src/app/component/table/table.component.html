@@ -30,7 +30,9 @@
                 <tr>
                   <th class="text-dark font-medium fs-4">Name</th>
                   <th class="text-dark font-medium fs-4">Gmail</th>
+                  <th class="text-dark font-medium fs-4">Country Code</th>
                   <th class="text-dark font-medium fs-4">Phone</th>
+                  <th class="text-dark font-medium fs-4">Schedule Date</th>
                   <th class="text-dark font-medium fs-4">Subject</th>
                   <th class="text-dark font-medium fs-4">Message</th>
                   <th class="text-dark font-medium fs-4">Actions</th>
@@ -43,7 +45,13 @@
                   </td>
                   <td class="fs-4">{{data.email}}</td>
                   <td>
+                    <h5 class="mb-0 fw-normal">{{data.countryCode}}</h5>
+                  </td>
+                  <td>
                     <h5 class="mb-0 fw-normal">{{data.number}}</h5>
+                  </td>
+                  <td>
+                    <h5 class="mb-0 fw-normal">{{ data.schedule_date | date: 'yyyy-MM-dd' }}</h5>
                   </td>
                   <td>
                     <h5 class="mb-0 fw-normal">{{data.subject}}</h5>

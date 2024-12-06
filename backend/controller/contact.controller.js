@@ -7,13 +7,18 @@ module.exports = {
 
   create: async (req, res, next) => {
     try {
-      const data = req.body
-      data.created_by = req.user ? req.user._id : 'unauth'
-      data.updated_by = req.user ? req.user._id : 'unauth'
-      data.created_at = Date.now()
-      const newData = new Model(data)
-      const result = await newData.save()
-      res.json(newData)
+      const data = req.body;
+      // Validate schedule_date
+      if (!data.schedule_date) {
+        throw createError.BadRequest('Schedule date is required');
+      }
+      data.created_by = req.user ? req.user._id : 'unauth';
+      data.updated_by = req.user ? req.user._id : 'unauth';
+      data.created_at = Date.now();
+      const newData = new Model(data);
+      const result = await newData.save();
+      res.json(newData);
+      res.json(result);
       return
     } catch (error) {
       next(error)
@@ -39,7 +44,7 @@ module.exports = {
   },
   list: async (req, res, next) => {
     try {
-      const { name, page, limit, sort } = req.query;
+      const { name, page, limit, sort, schedule_date } = req.query;
       const _page = page ? parseInt(page) : 1;
       const _limit = limit ? parseInt(limit) : 20;
       const _skip = (_page - 1) * _limit;
@@ -47,6 +52,9 @@ module.exports = {
       const query = {};
       if (name) {
         query.name = new RegExp(name, 'i');
+      }
+      if (schedule_date) {
+        query.schedule_date = { $eq: new Date(schedule_date) };
       }
       query.is_active = true;
       const result = await Model.aggregate([
@@ -78,6 +86,9 @@ module.exports = {
       }
       if (!data) {
         throw createError.BadRequest('Invalid Parameters')
+      }
+      if (!data.schedule_date) {
+        throw createError.BadRequest('Schedule date is required');
       }
       data.updated_at = Date.now()
       const result = await Model.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: data })

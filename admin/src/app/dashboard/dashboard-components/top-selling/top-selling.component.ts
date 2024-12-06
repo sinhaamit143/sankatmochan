@@ -3,10 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination'; // Import NgxPaginationModule
 import { ContactService } from 'src/app/services/contact.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-top-selling',
   standalone: true,
-  imports: [NgFor,NgxPaginationModule],
+  imports: [NgFor,NgxPaginationModule,DatePipe],
   templateUrl: './top-selling.component.html'
 })
 export class TopSellingComponent implements OnInit {

@@ -17,15 +17,21 @@ export class ContactComponent implements OnInit {
     this.myForm = this.fb.group({ // Initialize myForm here
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      countryCode:['', Validators.required],
       number: ['', Validators.required],
       subject: ['', Validators.required],
-      message: ['', Validators.required]
+      message: ['', Validators.required],
+      schedule_date: ['', Validators.required]
     });
   }
 
   onSubmit() {
     if (this.myForm.valid) {
       this.isLoading = true;
+      const formData = {
+        ...this.myForm.value,
+        schedule_date: new Date(this.myForm.value.schedule_date) // Ensure the date is sent in ISO format
+      };
       this._contactService.onContactSave(this.myForm.value).subscribe(
         (response) => {
           console.log(response);

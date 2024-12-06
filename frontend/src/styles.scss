@@ -568,7 +568,8 @@ h6 {
 
 .services .service-item .icon i {
   color: color-mix(in srgb, var(--heading-color), transparent 30%);
-  font-size: 56px;
+  font-size: 100px;
+  margin-left: 70px;
   transition: ease-in-out 0.3s;
   z-index: 2;
   position: relative;

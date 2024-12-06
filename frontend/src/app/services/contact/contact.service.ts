@@ -5,9 +5,11 @@ import { environment } from 'src/environments/environment';
 export interface ContactForm {
   name: string;
   email: string;
+  countryCode: string;
   number: string;
   subject: string;
   message: string;
+  schedule_date: string;
 }
 
 @Injectable({

@@ -312,3 +312,76 @@ section,
     left: auto;
   }
 }
+
+/* ---------------------------------------------------------------
+                     # flip card                                     
+-----------------------------------------------------------------*/
+:root {
+  --first-color: #999999;
+  --second-color: #008090;
+}
+
+.card-container {
+  height: 350px;
+  width: 450px;
+  perspective: 1000px;
+  margin: 0 auto;
+}
+
+.card-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s linear 1ms;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  text-align: center;
+}
+
+.card-front {
+  background-color: var(--first-color);
+  color: white;
+}
+
+.card-back {
+  background-color: var(--second-color);
+  //color: white;
+  transform: rotateY(180deg);
+}
+
+.card-container:hover .card-content {
+  transform: rotateY(180deg);
+}
+
+.service-item h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.service-item p {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.service-item .icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.readmore {
+  margin-top: 10px;
+  color: rgb(255, 255, 255);
+  text-decoration: underline;
+}

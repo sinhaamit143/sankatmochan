@@ -3,12 +3,13 @@ import { NgFor } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DatePipe } from '@angular/common';
 import { ContactForm, ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [NgFor, FormsModule, NgxPaginationModule],
+  imports: [NgFor, FormsModule, NgxPaginationModule,DatePipe],
   templateUrl: './table.component.html'  // Ensure the path is correct
 })
 export class TableComponent implements OnInit {
