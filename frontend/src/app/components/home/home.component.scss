@@ -279,6 +279,7 @@ background: #f7f7f7;
   width: 450px;
   perspective: 1000px;
   margin: 0 auto;
+  margin-left: -70px;
 }
 
 .card-content {
@@ -337,4 +338,8 @@ background: #f7f7f7;
   margin-top: 14px;
   color: rgb(255, 255, 255);
   text-decoration: underline;
+}
+
+.gx-custom {
+  --bs-gutter-x: 6.0rem;
 }
